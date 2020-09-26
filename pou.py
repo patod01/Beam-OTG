@@ -9,18 +9,25 @@ d = h-dp
 # [cm] Ancho
 b = 40
 # [kgf/cm2] Resistencia a compresión del hormigon
-fc = 250
-# [kgf/cm2] Modulo de elasticidad del acero
 Es = 2100000
 # Deformación del 3 por mil
 eu = 0.003
 # Valor de beta basado en resistencia del hormigon
-if fc < 280:
-    beta1 = 0.85
-elif 560 > fc >= 280:
-    beta1 = 0.85-0.2/280*(fc-280)
-elif fc > 560:
-    beta1 = 0.65
+
+
+def beta(fc):
+    if fc < 280:
+        beta1 = 0.85
+    elif 560 > fc >= 280:
+        beta1 = 0.85-0.2/280*(fc-280)
+    elif fc > 560:
+        beta1 = 0.65
+    return beta1
+
+
+fc = 250
+# [kgf/cm2] Modulo de elasticidad del acero
+beta1 = beta(fc)
 # [kgf/cm2] Resistencia del acero A63-42H
 fy = 4200
 # [cm2] Area de acero para el refuerzo superior
@@ -34,13 +41,16 @@ As_inf = 19.6
 # [cm2] Lista de areas de acero por nivel
 A = np.append([As_sup], np.append(np.array([A_lat for i in range(n_lat)]), [As_inf]), axis=0)
 # [cm] valor de c inicial correspondiente a 3/8 del valor de d
-c = 3*d/8
+
+""" Calculo de flexion simple"""
+# Valor de c para condicion balanceada
+cb = 3*d/8
 # [kgf/cm2] Lista de resistencias del acero por nivel rellena por ceros
 Fsi = np.zeros(len(A))
 # Lista de posiciones de cada nivel de acero
 y = np.array([5+i*round((h-2*dp)/(len(A)-1), 3) for i in range(len(A))])
 # Lista de deformaciones por nivel de acero
-ei = np.array([round(eu*(c-y[i])/c, 6) for i in range(len(A))])
+ei = np.array([round(eu*(cb-y[i])/cb, 6) for i in range(len(A))])
 # Deformacion del acero necesaria para que entre en fluencia
 ey = fy/Es
 # Valor inicial de PS
@@ -86,8 +96,40 @@ print(Ms/100000)
 print(Mc/100000)
 print(Mn)
 
+""" Calculo de compresion pura """
 
+# [kgf] Resistencia nominal a compresion
+Pnc = 0.85*fc*h*b + As*fy
+# [kgf] Resistencia nominal a compresion con factor de reduccion Ø
+phiPnc = 0.65*Pnc
+# [kgf] Resistencia nominal a compresion sin area de acero
+Pnc80 = 0.8*phiPnc
 
+""" Calculo de traccion pura """
 
+# [kgf] Resistencia nominal a traccion
+Pnt = -As*fy
+# Factor de reduccion en traccion
+phi = 0.9
+# [kgf] Resistencia nominal a traccion con factor de reduccion Ø
+phiPnt = phi*Pnt
 
+""" Calculo de condicion balanceada """
 
+Nei = np.zeros(len(y))
+Fsib = np.zeros(len(y))
+Psib = np.zeros(len(y))
+for i in range(len(y)):
+    Nei[i] = 0.003*(c-y[i])/c
+for i in range(len(Nei)):
+    if Nei[i] > ey:
+        Fsib[i] = fy
+    elif -ey <= ei[i] <= ey:
+        Fsib[i] = Es * ei[i]
+    elif ei[i] < -ey:
+        Fsib[i] = -fy
+        
+""" ɛ = 0.005 """
+""" Tabla resumen """
+""" Curvas de interaccion """
+""" Calculo de FU """
