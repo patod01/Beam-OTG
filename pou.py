@@ -1,21 +1,7 @@
-import numpy as np
-
-# [cm] Distancia de recubrimiento
-dp = 5
-# [cm] Altura sección
-h = 60
-# [cm] Altura efectiva de la seccion
-d = h-dp
-# [cm] Ancho
-b = 40
-# [kgf/cm2] Resistencia a compresión del hormigon
-Es = 2100000
-# Deformación del 3 por mil
-eu = 0.003
-# Valor de beta basado en resistencia del hormigon
-
+""" Valor de beta """
 
 def beta(fc):
+
     if fc < 280:
         beta1 = 0.85
     elif 560 > fc >= 280:
@@ -24,112 +10,332 @@ def beta(fc):
         beta1 = 0.65
     return beta1
 
+""" et"""
 
-fc = 250
-# [kgf/cm2] Modulo de elasticidad del acero
-beta1 = beta(fc)
-# [kgf/cm2] Resistencia del acero A63-42H
-fy = 4200
-# [cm2] Area de acero para el refuerzo superior
-As_sup = 19.6
-# [cm2] Area de cada nivel de refuerzo lateral
-A_lat = 9.8
-# Numero de refuerzos laterales
-n_lat = 2
-# [cm2] Area de acero para el refuerzo inferior
-As_inf = 19.6
-# [cm2] Lista de areas de acero por nivel
-A = np.append([As_sup], np.append(np.array([A_lat for i in range(n_lat)]), [As_inf]), axis=0)
-# [cm] valor de c inicial correspondiente a 3/8 del valor de d
+def eT(h,dp,c):
+    et = 0.003*(h-dp-c)/c
+    return et
 
-""" Calculo de flexion simple"""
-# Valor de c para condicion balanceada
-cb = 3*d/8
-# [kgf/cm2] Lista de resistencias del acero por nivel rellena por ceros
-Fsi = np.zeros(len(A))
-# Lista de posiciones de cada nivel de acero
-y = np.array([5+i*round((h-2*dp)/(len(A)-1), 3) for i in range(len(A))])
-# Lista de deformaciones por nivel de acero
-ei = np.array([round(eu*(cb-y[i])/cb, 6) for i in range(len(A))])
-# Deformacion del acero necesaria para que entre en fluencia
-ey = fy/Es
-# Valor inicial de PS
-Ps = 0
-# Valor inicial de error
-error = 1
-# Actualizacion de ei para las iteraciones de Fsi y c mientras no exista un error menor a 0.00001
-while abs(error) > 0.00001:
-    ei = np.array([round(eu*(c-y[i])/c, 6) for i in range(len(y))])
-    # [kgf/cm2] actualizacion de Fsi por cada cambio de c
+""" Valor de Ø """
+
+def phi(et):
+    phi = 0.65
+    if et < 0.002:
+        phi = 0.65
+    elif 0.002 <= et <= 0.005:
+        phi = 0.65 + 0.25/0.003 * (et - 0.002)
+    elif et > 0.005:
+        phi = 0.9
+    return phi
+
+""" Excentricidad """
+
+def exc(pn, mn):
+
+    if abs(pn) < 0.0001:
+        e = str("infinita")
+    else:
+        e = round(mn/pn,3)
+    return e
+
+""" Area barras de acero """
+
+def Acirc(D):
+
+    Ac = round(D**2*0.7854, 3)
+    return Ac
+
+""" Lista de Areas de acero por nivel """
+
+def Alist(Dsup, nsup, Dlat, nlat, Dinf, ninf):
+
+    Asup = Acirc(Dsup)*nsup
+    Alat = Acirc(Dlat)*2
+    Ainf = Acirc(Dinf)*ninf
+    A = [Asup]
+    for i in range(nlat):
+        A.append(Alat)
+    A.append(Ainf)
+    return A
+
+""" Suma de areas"""
+
+def aSum(A):
+    sum = 0
+    for i in A:
+        sum +=i
+    return sum
+
+""" Lista de posicion de niveles de areas """
+
+def Ylist(h, dp, nlat):
+
+    Y = [dp]
+    for i in range(1, nlat+1):
+        Y.append((h-Y[i-1]-dp)/(nlat+2-i)+Y[i-1])
+        if Y[i]-int(Y[i]) > 0.5:
+            Y[i] = int(Y[i])+1
+        else:
+            Y[i] = int(Y[i])
+    Y.append(h-dp)
+    return Y
+
+""" Lista de valores de ei """
+
+def eiList(Y, c):
+
+    ei = []
+    for i in range(len(Y)):
+        ei.append((c-Y[i])/c * 0.003)
+    return ei
+
+""" Lista de valores de fs en funcion de ei """
+
+def fsList(ei, ey, fy, Es):
+
+    fs = []
     for i in range(len(ei)):
         if ei[i] > ey:
-            Fsi[i] = fy
+            fs.append(fy)
         elif -ey <= ei[i] <= ey:
-            Fsi[i] = Es*ei[i]
+            fs.append(Es * ei[i])
         elif ei[i] < -ey:
-            Fsi[i] = -fy
-    # [kgf/cm2] Lista de valores para la resistencia axial del acero
-    for i in range(len(Fsi)):
-        Ps = Fsi[i]*A[i]
-    # [cm] Valor de c anterior
-    c2 = -Ps/(0.85*beta1*fc*b)
-    # [cm] Nuevo valor de c, correspondiente a la semi-suma de su valor anterior y su valor actual
-    c = round((c2+c)/2, 4)
-    # valor del error basado en diferencias de valor anterior y nuevo
-    error = (c2-c)/c
-# [kgf] Resistencia a compresion generada por el hormigon
-Pc = 0.85*beta1*fc*b*c
-# [kgf * cm] Momento de compresion generado por la zona de compresion
-Mc = Pc*(h/2-0.85*c/2)
-# Valor inicial de Ms
-Ms = 0
-# Valor inicial de As
-As = 0
-for i in range(len(y)):
-    # [kgf * cm] Sumatoria de momentos por nivel de acero
-    Ms = Ms+Fsi[i]*A[i]*(h/2-y[i])
-    # [cm2] Sumatoria de areas por nivel de acero
-    As = As + A[i]
-# [tf * m] Valor de momento nominal con cambio de unidades
-Mn = (Ms + Mc)/100000.
-print(Ms/100000)
-print(Mc/100000)
-print(Mn)
+            fs.append(-fy)
+    return fs
 
-""" Calculo de compresion pura """
+""" Lista de Ps """
 
-# [kgf] Resistencia nominal a compresion
-Pnc = 0.85*fc*h*b + As*fy
-# [kgf] Resistencia nominal a compresion con factor de reduccion Ø
-phiPnc = 0.65*Pnc
-# [kgf] Resistencia nominal a compresion sin area de acero
-Pnc80 = 0.8*phiPnc
+def psList(fs, A):
 
-""" Calculo de traccion pura """
+    ps = []
+    for i in range(len(A)):
+        ps.append(fs[i]*A[i])
+    return ps
 
-# [kgf] Resistencia nominal a traccion
-Pnt = -As*fy
-# Factor de reduccion en traccion
-phi = 0.9
-# [kgf] Resistencia nominal a traccion con factor de reduccion Ø
-phiPnt = phi*Pnt
+""" Sumatoria Ps"""
 
-""" Calculo de condicion balanceada """
+def sumPs(fs, A):
+    sumps = 0
+    for i in range(len(A)):
+        sumps = sumps + (fs[i] * A[i])
+    return sumps
 
-Nei = np.zeros(len(y))
-Fsib = np.zeros(len(y))
-Psib = np.zeros(len(y))
-for i in range(len(y)):
-    Nei[i] = 0.003*(c-y[i])/c
-for i in range(len(Nei)):
-    if Nei[i] > ey:
-        Fsib[i] = fy
-    elif -ey <= ei[i] <= ey:
-        Fsib[i] = Es * ei[i]
-    elif ei[i] < -ey:
-        Fsib[i] = -fy
-        
-""" ɛ = 0.005 """
-""" Tabla resumen """
-""" Curvas de interaccion """
-""" Calculo de FU """
+
+""" Calculo Pc """
+
+def Pc(beta, fc, b, c):
+
+    pc = 0.85*beta*fc*b*c
+    return pc
+
+"""  Calculo de Pn """
+
+def Pn(fs, A, pc):
+    ps = sumPs(fs,A)
+    pn = ps + pc
+    return pn
+
+"""  Calculo de ØPn """
+
+def phiPn(phi, pn):
+
+    phiPn = phi*pn
+    return phiPn
+
+""" Calculo Ms  """
+
+def Ms(fs, A, h, Y):
+
+    ps = psList(fs, A)
+    ms=0
+    for i in range(len(fs)):
+        ms = ms + ps[i]*(0.5*h-Y[i])
+    return ms
+
+""" Calculo Mc """
+
+def Mc(pc, h, c):
+
+    mc = 0.5*pc*(h-0.85*c)
+    return mc
+
+""" Calculo de Mn """
+
+def Mn(ms, mc):
+
+    mn = ms+mc
+    return mn
+
+""" Calculo de ØMn """
+
+def phiMn(phi, mn):
+
+    phiMn = phi*mn
+    return phiMn
+
+""" Calcular valor de c en linea neutra """
+
+def cLN(h, b, dp, fc, A, Y, ey, fy, Es):
+
+    c1 = dp
+    c2 = h
+    pn = 1
+    while abs(pn) > 0.00001:
+        c = (c1+c2)/2
+        ei = eiList(Y, c)
+        fs = fsList(ei, ey, fy, Es)
+        ps = sumPs(fs, A)
+        pc = Pc(beta, fc, b, c)
+        pn = round(pc + ps, 4)
+        if pn > 0:
+            c2 = c
+        else:
+            c1 = c
+    return round(c, 3)
+
+""" Calcular c de compresión pura """
+
+def cComp(beta, h,dp):
+
+    c = round(max(h/beta, 3*(h-dp)),3)
+    return c
+
+""" Calcular valor de c maximo """
+
+def cMax(h, b, dp, fc, A, Y, ey, fy, Es):
+    pc = Pc((h * b - aSum(A)) / (h * b), fc, b, h)
+    ps = aSum(A) * fy
+    pn = 0.8 * (pc + ps)
+    Pn = 0
+    c1 = 1
+    c2 = 3 * (h - dp)
+    while abs(pn - Pn) > 0.001:
+        c = (c1 + c2) / 2
+        ei = eiList(Y, c)
+        fs = fsList(ei, ey, fy, Es)
+        ps = sumPs(fs, A)
+        pc = Pc(beta, fc, b, c)
+        Pn = round(pc + ps, 4)
+        if Pn - pn > 0.001:
+            c2 = c
+        else:
+            c1 = c
+    return round(c, 3)
+
+""" Compresion 80 ó 100 """
+
+def CompP(porc, beta, fc, h, b, dp, A, Y, ey, fy, Es):
+
+    pc = Pc(1, fc, b, h)
+    pn = round(porc*(pc + aSum(A)*fy)/100000,2)
+    if porc == 100:
+        c = cComp(beta, h, dp)
+    elif porc == 80:
+        c = cMax(h, b, dp, fc, A, Y, ey, fy, Es)
+    Phi = 0.65
+    if porc == 80:
+        phipn = round(pn*Phi,2)
+    else:
+        phipn = round(pn*Phi*.8,2)
+    mn = 0
+    phimn = 0
+    e = 0
+    Lres = [c, Phi, mn, pn, phimn, phipn, e]
+    return Lres
+
+""" Traccion pura """
+
+def Trac(fy, A):
+
+    c = 0
+    pn = round(-aSum(A) * fy/1000, 2)
+    Phi = 0.9
+    phipn = round(pn * Phi, 2)
+    mn = 0
+    phimn = 0
+    e = 0
+    Lres = [c, Phi, mn, pn, phimn, phipn, e]
+    return Lres
+
+""" Lista resumen """
+
+def Resumen(beta, fc, b, c, Y, h, dp, ey, fy, Es, A):
+
+    pc = Pc(beta, fc, b, c)
+    ei = eiList(Y, c)
+    et = eT(h,dp,c)
+    Phi = phi(et)
+    fs = fsList(ei, ey, fy, Es)
+    pn = round(Pn(fs, A, pc)/1000, 2)
+    phipn = round(phiPn(Phi, pn), 2)
+    mc = round(Mc(pc, h, c)/100000, 2)
+    ms = round(Ms(fs, A, h, Y)/100000, 2)
+    mn = round(Mn(ms, mc), 2)
+    phimn = round(phiMn(Phi, mn), 2)
+    e = exc(pn, mn)
+    Lres = [c, Phi, mn, pn, phimn, phipn, e]
+    return Lres
+
+""" Calculo de flexion simple (L.N.) """
+
+def FS(beta, fc, b, Y, h, dp, ey, fy, Es, A):
+
+    c = round(cLN(h, b, dp, fc, A, Y, ey, fy, Es), 3)
+    FS = Resumen(beta, fc, b, c, Y, h, dp, ey, fy, Es, A)
+    return FS
+
+""" Condicion balanceada """
+
+def cBal(beta, fc, b, Y, h, dp, ey, fy, Es, A):
+    c = 0.6*(h-dp)
+    CB = Resumen(beta, fc, b, c, Y, h, dp, ey, fy, Es, A)
+    return CB
+
+""" Ɛ = 0.005 """
+
+def e5(beta, fc, b, Y, h, dp, ey, fy, Es, A):
+    c = 0.375*(h-dp)
+    E5 = Resumen(beta, fc, b, c, Y, h, dp, ey, fy, Es, A)
+    return E5
+
+""" Datos de entrada """
+
+fc = 250
+fy = 4200
+Es = 2100000
+ey = fy/Es
+h = 60
+b = 40
+dp = 5
+beta = beta(fc)
+Dsup = 2.5
+nsup = 4
+Dlat = 2.5
+nlat = 2
+Dinf = 2.5
+ninf = 4
+A = Alist(Dsup, nsup, Dlat, nlat, Dinf, ninf)
+Y = Ylist(h, dp, nlat)
+FS = FS(beta, fc, b, Y, h, dp, ey, fy, Es, A)
+E5 = e5(beta, fc, b, Y, h, dp, ey, fy, Es, A)
+CB = cBal(beta, fc, b, Y, h, dp, ey, fy, Es, A)
+TR = Trac(fy, A)
+CP80 = CompP(80, beta, fc, h, b, dp, A, Y, ey, fy, Es)
+CP100 = CompP(100, beta, fc, h, b, dp, A, Y, ey, fy, Es)
+print(CP100)
+print(CP80)
+print(CB)
+print(E5)
+print(FS)
+print(TR)
+et = []
+Phi = []
+for i in range(1,61):
+    et.append(round(eT(60,5,i),5))
+    Phi.append(round(phi(et[i-1]),3))
+
+""" Falta :"""
+
+# Cuantía mínima y máxima
+# Relación FU para encontrar combinación óptima entre Mu y Pu dado
+# Corte
