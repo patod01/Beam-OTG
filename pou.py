@@ -3,6 +3,8 @@ from time import time
 
 # se define la variable tinicial para medir el tiempo inicial
 tinicial = time()
+
+
 """ Función para calcular el valor de beta """
 
 
