@@ -3,6 +3,8 @@ from time import time
 
 # se define la variable tinicial para medir el tiempo inicial
 tinicial = time()
+
+
 """ Función para calcular el valor de beta """
 
 
@@ -85,7 +87,7 @@ def exc(pn, mn):
 # define función Acirc para el cálculo de áreas en barras, donde D es el diámetro en [cm]
 def Acirc(D):
     # el área del círculo es el cuadrado del diámetro por pi/4, redondeado a 3 decimales
-    Ac = round(D ** 2 * 0.7854, 3)
+    Ac = round(D ** 2 * 0.007854, 3)
     # la función devuelve el valor de Ac
     return Ac
 
@@ -477,7 +479,7 @@ def CompP(porc, beta, fc, h, b, dp, A, Y, ey, fy, Es):
         # en [tonf*m]
         mn = round(Mn(ms, mc) / 100000, 2)
         # se calcula phiMn, multiplicando por el factor de minoración phi, en [tonf*m]
-        phimn = phiMn(Phi, mn)
+        phimn = round(phiMn(Phi, mn), 2)
         # se calcula la excentricidad dividiendo mn por pn y redondeando la cifra a 3 decimales
         e = round(mn/pn, 3)
     # se genera una lista con los valores calculados et, c, Phi,
@@ -546,7 +548,7 @@ def Resumen(beta, fc, b, c, Y, h, dp, ey, fy, Es, A):
     # y se redondea a 2 decimales, luego se transforma a [tonf*m]
     ms = round(Ms(fs, A, h, Y) / 100000, 2)
     # se calcula el momento nominal total sumando mc y ms, el resultado queda en [tonf*m]
-    mn = Mn(ms, mc)
+    mn = round(Mn(ms, mc), 2)
     # se calcula el valor de phiMn, donde se multiplica mn por el factor de minoración phi,
     # el resultado se redondea a 2 decimales y queda en [tonf*m]
     phimn = round(phiMn(Phi, mn), 2)
@@ -621,11 +623,11 @@ def e5(beta, fc, b, Y, h, dp, ey, fy, Es, A):
 # TRm corresponde al valor de mn del elemento en Tracción pura
 def Rang(pu, mu, CP100m, CP80p, CP80m, CBp, CBm, E5p, E5m, FSp, FSm, TRp, TRm):
     # e1 es la excentricidad del elemento en compresón pura all 80%
-    e1 = CP80m / CP80p
+    e1 = CP80m / (CP80p+0.0001)
     # e2 es la excentrcidad del elemento en condición balanceada
-    e2 = CBm / CBp
+    e2 = CBm / (CBp+0.0001)
     # e3 es la excentricidad del elemento en epsilon=0.005
-    e3 = E5m / E5p
+    e3 = E5m / (E5p+0.0001)
     # si la carga solicitada es cero, toma el valor de 0.001 para evitar zeroErrorDivision
     if pu == 0:
         pu = 0.001
@@ -633,12 +635,12 @@ def Rang(pu, mu, CP100m, CP80p, CP80m, CBp, CBm, E5p, E5m, FSp, FSm, TRp, TRm):
     e = mu / pu
     # si la excentricidad solicitada es menor a e1, la recta a interpolar toma los valores
     # p2 = CP80p, p1 = CP80p, m2 = CP100m y m1 = CP80m
-    if e <= e1:
+    if 0 <= e <= e1:
         p2 = CP80p
         p1 = CP80p
         m2 = CP100m
         m1 = CP80m
-        print("1")
+        zona = "compresión_pura"
     # si la excentricidad solicitada está entre e1 y e2, la recta a interpolar toma los valores
     # p2 = CP80p, p1 = CBp, m2 = CP100m y m1 = CBm
     elif e1 < e < e2:
@@ -646,7 +648,7 @@ def Rang(pu, mu, CP100m, CP80p, CP80m, CBp, CBm, E5p, E5m, FSp, FSm, TRp, TRm):
         p1 = CBp
         m2 = CP100m
         m1 = CBm
-        print("2")
+        zona = "condición_balanceada"
     # si la excentricidad solicitada está entre e2 y e3, la recta a interpolar
     # toma los valores p2 = CBp, p1 = E5p, m2 = CBm y m1 = E5m
     elif e2 <= e < e3:
@@ -654,26 +656,26 @@ def Rang(pu, mu, CP100m, CP80p, CP80m, CBp, CBm, E5p, E5m, FSp, FSm, TRp, TRm):
         p1 = E5p
         m2 = CBm
         m1 = E5m
-        print("3")
+        zona = "epsilon=0.005"
     # si la excentricidad solicitada es mayor a e3, la recta a interpolar
     # toma los valores p2 = E5p, p1 = FSp, m2 = E5m y m1 = FSm
-    elif pu > e3:
+    elif e > e3:
         p2 = E5p
         p1 = FSp
         m2 = E5m
         m1 = FSm
-        print("4")
+        zona = "flexión_simple"
     # si la excentricidad solicitada es a cero, la recta a interpolar
     # toma los valores p2 = FSp, p1 = TRp, m2 = FSm y m1 = TRm
-    elif pu < 0:
+    elif e < -0.001:
         p2 = FSp
         p1 = TRp
         m2 = FSm
         m1 = TRm
-        print("5")
+        zona = "tracción_pura"
     # se crea la lista Rango, que contiene los valores de p1, p2, m1, m2
-    Rango = [p1, p2, m1, m2]
-    print(Rango)
+    Rango = [p1, p2, m1, m2, zona]
+    # print(Rango)
     # la función devuelve la lista Rango
     return Rango
 
@@ -756,10 +758,14 @@ error = 1
 # la recta que se genera desde el origen hasta el punto (mu,pu), e intersecta con la
 # curva de interacción, entre los puntos p1, p2, m1, m2 del rango en que se encuentre
 def ecRecta(mu, pu, p2, p1, m2, m1):
+    # se calcula valor absoluto del momento y añade 0.0001 para evitar ZeroDivisionError
+    mu = abs(mu)+0.0001
+    #
+    pu = pu + 0.0001
     # se calcula la excentricidad dividiendo mu por pu
     e = mu/pu
     # se calcula la pendiente de la recta m
-    m = (p2-p1)/(m2-m1)
+    m = (p2-p1)/(m2-m1+0.0001)
     # se calcula el valor de phimn intersectando ambas curvas, el valor se redondea
     # a 3 decimales en [tonf*m]
     phimn = round((p1-m*m1)/(1/e-m), 3)
@@ -768,18 +774,22 @@ def ecRecta(mu, pu, p2, p1, m2, m1):
     phipn = round(phimn/e, 3)
     # el factor de utilización FU, es la división entre la carga solicitada pu y la carga
     # nominal pn, el resultado se redondea a 3 decimales
-    FU = round(pu/phipn, 3)
+    if phipn < 0.0001:
+        FU = abs(round(pu/0.0001, 3))
+    else:
+        FU = abs(round(pu/phipn, 3))
     # la función imprime los valores de phimn, phipn y FU
-    return print("ØMn = " + str(phimn) + "\n ØPn = " +
-                 str(phipn) + "\n FU = " + str(FU))
+    ecList = [FU, phimn, phipn, round(phimn/phipn, 3)]
+    return ecList
 
 
 """ Datos de entrada """
 
+
 # la carga solicitada pu en [tonf]
-pu = 144
+pu = [0.1, 200, 400, 700]
 # el momento solicitado mu en [tonf*m]
-mu = 30
+mu = [0.1, 50, 100, 300]
 # la resistencia del hormigón a la compresión en [kgf/cm2]
 fc = 250
 # la resistencia del acero en su rango elástico a compresión y tracción en [kgf/cm2]
@@ -789,121 +799,169 @@ Es = 2100000
 # la relación entre fy y Es
 ey = fy/Es
 # la atura de la sección h en [cm]
-h = 60
+h = [40, 60, 80]
 # el ancho de la sección b en [cm]
-b = 40
+b = [20, 40, 60, 80]
 # la distancia de recubrimiento desde el centro de la primera
 # barra a un extremo de la sección en [cm]
 dp = 5
 # el valor de beta1 según la resistencia del hormigón
 beta = beta(fc)
 # el diámetro de las barras de acero ubicadas en la posición superior del perfil en [cm]
-Dsup = 2.5
+Dsup = [22, 25, 28, 32, 36]
 # la cantidad de barras de acero en la posición superior del perfil en [cm]
-nsup = 4
+nsup = [2, 3, 4, 5, 6, 8]
 # el diámetro de las barras de acero laterales en [cm]
-Dlat = 2.5
+Dlat = [16, 22, 25, 28, 32, 36]
 # la cantidad de niveles de barras laterales de acero, cada nivel lleva 2 barras
-nlat = 2
+nlat = [1, 2, 3, 4, 5, 6, 8]
 # el diámetro de las barras de acero del nivel inferior del perfil en [cm]
-Dinf = 2.5
+Dinf = [22, 25, 28, 32, 36]
 # el número de barras de acero en el nivel inferior
-ninf = 4
-# A es la lista de áreas de acero por nivel
-A = Alist(Dsup, nsup, Dlat, nlat, Dinf, ninf)
-# Y es la lista de posiciones Yi de los niveles de barras de acero
-Y = Ylist(h, dp, nlat)
+ninf = [2, 3, 4, 5, 6]
 
 
 """ Cálculo de flexión compuesta"""
 
 
-# se crea lista con valores de et, # c, Phi, mn, pn, phimn,
-# phipn y e en flexión simple
-FS = FS(beta, fc, b, Y, h, dp, ey, fy, Es, A)
-# se crea lista con valores de et, # c, Phi, mn, pn, phimn,
-# phipn y e en epsilon=0.005
-E5 = e5(beta, fc, b, Y, h, dp, ey, fy, Es, A)
-# se crea lista con valores de et, c, Phi, mn, pn, phimn,
-# phipn y e en condición balanceada
-CB = cBal(beta, fc, b, Y, h, dp, ey, fy, Es, A)
-# se crea lista con valores de et, c, Phi, mn, pn, phimn,
-# phipn y e en tracción pura
-TR = Trac(fy, A)
-# se crea lista con valores de et, c, Phi, mn, pn, phimn,
-# phipn y e en compresión pura al 80%
-CP80 = CompP(80, beta, fc, h, b, dp, A, Y, ey, fy, Es)
-# se crea lista con valores de et, c, Phi, mn, pn, phimn,
-# phipn y e en compresión pura al 100%
-CP100 = CompP(100, beta, fc, h, b, dp, A, Y, ey, fy, Es)
-print(CP100)
-print(CP80)
-print(CB)
-print(E5)
-print(FS)
-print(TR)
+def listaexc(pu, mu, fc, fy, Es, ey, h, b, dp, beta, Dsup, Dlat, Dinf, nsup, nlat, ninf):
+    # entrada = [pu, mu, fc, fy, Es, ey, h, b, dp, beta, Dsup, Dlat, Dinf, nsup, nlat, ninf]
+    # print(entrada)
+    # A es la lista de áreas de acero por nivel
+    A = Alist(Dsup, nsup, Dlat, nlat, Dinf, ninf)
+    # Y es la lista de posiciones Yi de los niveles de barras de acero
+    Y = Ylist(h, dp, nlat)
+    # se crea lista con valores de et, # c, Phi, mn, pn, phimn,
+    # phipn y e en flexión simple
+    Fs = FS(beta, fc, b, Y, h, dp, ey, fy, Es, A)
+    # se crea lista con valores de et, # c, Phi, mn, pn, phimn,
+    # phipn y e en epsilon=0.005
+    E5 = e5(beta, fc, b, Y, h, dp, ey, fy, Es, A)
+    # se crea lista con valores de et, c, Phi, mn, pn, phimn,
+    # phipn y e en condición balanceada
+    CB = cBal(beta, fc, b, Y, h, dp, ey, fy, Es, A)
+    # se crea lista con valores de et, c, Phi, mn, pn, phimn,
+    # phipn y e en tracción pura
+    TR = Trac(fy, A)
+    # se crea lista con valores de et, c, Phi, mn, pn, phimn,
+    # phipn y e en compresión pura al 80%
+    CP80 = CompP(80, beta, fc, h, b, dp, A, Y, ey, fy, Es)
+    # se crea lista con valores de et, c, Phi, mn, pn, phimn,
+    # phipn y e en compresión pura al 100%
+    CP100 = CompP(100, beta, fc, h, b, dp, A, Y, ey, fy, Es)
+    # print(CP100)
+    # print(CP80)
+    # print(CB)
+    # print(E5)
+    # print(FS)
+    # print(TR)
 
 
-""" Cálculo de Corte """
-
-# se inresa el valor de Nu solicitado
-Nu = 0
-# se ingresa el de estribos en [cm]
-Dest = 1
-# se igresa el número de ramas
-Nramas = 4
-# s es la distancia de los estribos en [cm]
-s = 20
-# se calcula AVS
-AVS = AVS(Dest, Nramas, s)
-# se calcula el corte nominnal Vn en [tonf]
-vn = Vn(fc, Nu, b, h, dp, AVS)
-# se define el factor de minoración phiV, donde 0.6 corresponde a elementos
-# sismorresistentes y 0.75 al resto de elementos
-phiV = 0.6
-# se calcula el corte nominal minorado phiVn multiplicando V por phiV
-phiVn = phiVn(vn, phiV)
-print(vn)
-print(phiVn)
+    """ Cálculo de Corte """
 
 
-""" Cálculo de FU """
+    # # se inresa el valor de Nu solicitado
+    # Nu = 0
+    # # se ingresa el de estribos en [cm]
+    # Dest = 1
+    # # se igresa el número de ramas
+    # Nramas = 4
+    # # s es la distancia de los estribos en [cm]
+    # s = 20
+    # # se calcula AVS
+    # AVS = AVS(Dest, Nramas, s)
+    # # se calcula el corte nominnal Vn en [tonf]
+    # vn = Vn(fc, Nu, b, h, dp, AVS)
+    # # se define el factor de minoración phiV, donde 0.6 corresponde a elementos
+    # # sismorresistentes y 0.75 al resto de elementos
+    # phiV = 0.6
+    # # se calcula el corte nominal minorado phiVn multiplicando V por phiV
+    # phiVn = phiVn(vn, phiV)
+    # print(vn)
+    # print(phiVn)
 
-# CP80p corresponde al valor de pn del elemento en compresión al 80%
-CP80p = CP80[6]
-# CP100m corresponde al valor de mn del elemento en compresión al 100%,
-CP100m = CP100[5]
-# CP80m corresponde al valor de mn del elemento en compresión al 80%
-CP80m = CP80[5]
-# CBp corresponde al valor de pn del elemento en condición balanceada
-CBp = CB[6]
-# CBm corresponde al valor de mn del elemento en condición balanceada
-CBm = CB[5]
-# E5p corresponde al valor de pn del elemento en epsilon = 0.005
-E5p = E5[6]
-# E5m corresponde al valor de mn del elemento en epsilon = 0.005
-E5m = E5[5]
-# FSp corresponde al valor de pn del elemento en flexión simple
-FSp = FS[6]
-# FSm corresponde al valor de mn del elemento en flexión simple
-FSm = FS[5]
-# TRp corresponde al valor de pn del elemento en Tracción pura
-TRp = TR[6]
-# TRm corresponde al valor de mn del elemento en Tracción pura
-TRm = TR[5]
-# Pu_Mu llama a la función Rang para determinar en que rango de la curva de interacción
-# se encuentra la recta proyectada entre el orenn y el punto (mu, pu), devolviendo así
-# los puntos p1, p2, m1 y m2 del rango en cuestión
-Pu_Mu = Rang(pu, mu, CP100m, CP80p, CP80m, CBp, CBm, E5p, E5m, FSp, FSm, TRp, TRm)
-p1 = Pu_Mu[0]
-p2 = Pu_Mu[1]
-m1 = Pu_Mu[2]
-m2 = Pu_Mu[3]
-print(round(mu / pu, 3))
-print(str(p1) + " \n " + str(p2) + " \n " + str(m1) + " \n " + str(m2))
-# se llaa a la función ecRecta para determinar los valores de phiMn, phiPn y FU de
-# acuerdo a la carga pu y momento mu solicitados
-ecRecta(mu, pu, p2, p1, m2, m1)
+
+    """ Cálculo de FU """
+
+
+    # CP80p corresponde al valor de pn del elemento en compresión al 80%
+    CP80p = CP80[6]
+    # CP100m corresponde al valor de mn del elemento en compresión al 100%,
+    CP100m = CP100[5]
+    # CP80m corresponde al valor de mn del elemento en compresión al 80%
+    CP80m = CP80[5]
+    # CBp corresponde al valor de pn del elemento en condición balanceada
+    CBp = CB[6]
+    # CBm corresponde al valor de mn del elemento en condición balanceada
+    CBm = CB[5]
+    # E5p corresponde al valor de pn del elemento en epsilon = 0.005
+    E5p = E5[6]
+    # E5m corresponde al valor de mn del elemento en epsilon = 0.005
+    E5m = E5[5]
+    # FSp corresponde al valor de pn del elemento en flexión simple
+    FSp = Fs[6]
+    # FSm corresponde al valor de mn del elemento en flexión simple
+    FSm = Fs[5]
+    # TRp corresponde al valor de pn del elemento en Tracción pura
+    TRp = TR[6]
+    # TRm corresponde al valor de mn del elemento en Tracción pura
+    TRm = TR[5]
+    # Pu_Mu llama a la función Rang para determinar en que rango de la curva de interacción
+    # se encuentra la recta proyectada entre el orenn y el punto (mu, pu), devolviendo así
+    # los puntos p1, p2, m1 y m2 del rango en cuestión
+    Pu_Mu = Rang(pu, mu, CP100m, CP80p, CP80m, CBp, CBm, E5p, E5m, FSp, FSm, TRp, TRm)
+    p1 = Pu_Mu[0]
+    p2 = Pu_Mu[1]
+    m1 = Pu_Mu[2]
+    m2 = Pu_Mu[3]
+    zona = Pu_Mu[4]
+    # print(round(mu / pu, 3))
+    # print(str(p1) + " \n " + str(p2) + " \n " + str(m1) + " \n " + str(m2))
+    # se llaa a la función ecRecta para determinar los valores de phiMn, phiPn y FU de
+    # acuerdo a la carga pu y momento mu solicitados
+    ec = ecRecta(mu, pu, p2, p1, m2, m1)
+    # ec = [e, phimn, phipn, FU]
+    # pu, mu, fc, fy, Es, ey, h, b, dp, beta, Dsup, Dlat, Dinf, nsup, nlat, ninf
+    cuantia = 0.7854*(Dsup**2*nsup+Dlat**2*nlat+Dinf**2*ninf)/(b*h*100)
+    a = [round(mu/pu, 3), mu, pu, ec[0], ec[1], ec[2], ec[3], h, b, Dsup, nsup, nlat, Dlat, Dinf, ninf, zona, round(cuantia,5)]
+    # print(str(a[0])+" "+str(a[1])+" "+str(a[2])+" "+str(a[3])+" "+str(a[4])+" "+str(a[5])+" "+str(a[6])+" "+str(a[7])+" "
+    #       +str(a[8])+" "+str(a[9])+" "+str(a[10])+" "+str(a[11])+" "+str(a[12])+" "+str(a[13])+" "+str(a[14])+" "+str(a[15])+" ")
+    return a
+
+
+""" Iteraciones """
+
+
+file = open("C:/p/asdf.txt", 'a')
+# datos de prueba
+# asd = listaexc(144, 30, fc, fy, Es, ey, 60, 40, dp, beta, 25, 4, 2, 25, 25, 4)
+# print(asd)
+file.write("e mu pu FU phimn phipn emn h b Dsup nsup nlat Dlat Dinf ninf zona \n")
+cuenta = 0
+for i in pu:
+    for j in mu:
+        for k in h:
+            for l in b:
+                for n in Dsup:
+                    for o in Dlat:
+                        for p in Dinf:
+                            for q in nsup:
+                                for r in nlat:
+                                    for s in ninf:
+                                        a=listaexc(i, j, fc, fy, Es, ey, k, l, dp, beta, n, o, p, q, r, s)
+                                        print(a)
+                                        if a[3] < 1 and 0.00333 < a[16] < 0.01935:
+                                            file.write(str(a)+"\n")
+                                            cuenta += 1
+                                        else:
+                                            pass
+file.close()
+# print(cuenta)
+
+
+""" Calcula tiempo de ejecución """
+
+
 # se registra el tiempo al final de la ejecución del programa
 tfinal = time()
 # se calcula el tiempo total de la ejecución, desde su inicio hasta el fin
