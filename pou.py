@@ -321,3 +321,4 @@ print(FU)
 print(phiVn)
 tiempo = round(time() - tinicial, 6)
 print("tiempo de ejecución = " + str(tiempo) + " segundos")
+#esto está editado.
