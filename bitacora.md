@@ -2,9 +2,9 @@
 
 __2020.12.22__
 
-llegado este dia, fue entretenido, pero los contratiempos por las
+llegado este dia, fue entretenido, pero por los contratiempos por las
 fiestas y actividades que acabaron mas tarde de lo planeado... se
-suspende temporalmente el avance de la biblioteca "algo.py" para dar
+suspende temporalmente el avance de la biblioteca _algo.py_ para dar
 prioridad al resto del proyecto. El avance queda hasta la definicion
 de las matrices, faltando la parte aritmetica.
 
