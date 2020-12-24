@@ -11,3 +11,10 @@ de las matrices, faltando la parte aritmetica.
 Se procede a trabajar con _numpy_ para la recuperacion y traduccion
 del codigo faltante... _it's never too late to earn a new tool. Isn't
 it?_.
+
+__2020.12.23__
+
+nos metimos en el horrible mundo de _numpy_, y es que es mas feo de
+lo imaginado, pero me ha sacado de un apuro. En este momento ya se ha
+traducido lo que se pudo rescatar del programa y se da pie al inicio
+de la automatizacion de las rutinas.
