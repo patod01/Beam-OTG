@@ -28,6 +28,9 @@ grande, eliminando las barreras de licencias extremadamente caras.
 
 ## To-Do list:
 
+- [ ] I/O:
+    - [ ] Coordenadas.
+    - [ ] Cargas.
 - [ ] Analisis matricial:
     - [ ] ~Algebra matricial:~
         - [x] Definicion de matrices.
@@ -36,6 +39,7 @@ grande, eliminando las barreras de licencias extremadamente caras.
             - [ ] Multiplicacion.
         - [ ] Solucion de ecuaciones matriciales.
         - [ ] Matriz inversa.
+
     - [ ] Generador de grados de libertad.
     - ...
 - [ ] Cubicacion.
