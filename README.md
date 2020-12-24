@@ -31,6 +31,7 @@ grande, eliminando las barreras de licencias extremadamente caras.
 - [ ] I/O:
     - [ ] Coordenadas.
     - [ ] Cargas.
+    - [ ] Presentacion de analisis.
 - [ ] Analisis matricial:
     - [ ] ~Algebra matricial:~
         - [x] Definicion de matrices.
@@ -39,13 +40,12 @@ grande, eliminando las barreras de licencias extremadamente caras.
             - [ ] Multiplicacion.
         - [ ] Solucion de ecuaciones matriciales.
         - [ ] Matriz inversa.
-
-    - [ ] Generador de grados de libertad.
-    - ...
+    - [ ] Rigideces locales.
+    - [ ] Compatibilidad geometrica.
+    - [x] Grados de libertad.
 - [ ] Cubicacion.
 - [ ] Analisis sismo resistente.
     - [ ] Analisis estatico.
 - [ ] Optimizacion de perfiles.
-    - ...
 
 123456789012345678901234567890123456789012345678901234567890123456789
