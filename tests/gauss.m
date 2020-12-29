@@ -1,4 +1,4 @@
-clear s_Zero; clc;
+clear s_Zero; %clc;
 
 function [nMatrix] = s_Zero(piv, M, R)
     aux = zeros(1, R + 1);
@@ -15,13 +15,14 @@ function [nMatrix] = s_Zero(piv, M, R)
     nMatrix = M;
 end % permuta
 
-% para correr el bench, comentar A y b.
+% para benchmark con matrices random, comentar esta seccion.
 A = [0 0 -3 1; 0 1 4 0; 0 0 -1 0; -1 0 1 0];
 b = [-3 6 -1 0]';
 
-n = rank(A);
-b2 = zeros(n, 1);
-Ab = [A b];
+% para benchmark con matrices random, descomentar esta seccion.
+%n = rank(A);
+%b2 = zeros(n, 1);
+%Ab = [A b];
 
 tic
 
@@ -48,6 +49,4 @@ for i = n - 1:-1:1
 end
 
 res = [eye(n) b2];
-
-% para realizar el benchmark, comentar el clear.
-clear i j n;
+%clear i j n;

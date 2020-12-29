@@ -1,8 +1,6 @@
-def K(k, a, b, gdl):
-    T = zeros([6, 3*gdl])
+def GdL(bar='', a, b, nodos, tipo=''):
+    T = zeros([6, 3*nodos])
     
-    if x < 0 or y < 0:
-        return "index error"
     # elseif x == 1 || y == 1
     #     return "reacts not considered"
     # elseif x == 19 || y == 19
@@ -12,13 +10,17 @@ def K(k, a, b, gdl):
     
     # x == 20 ? x-=1 : x
     # y == 20 ? y-=1 : y
-
-        T[0, 2*a - 3] = 1
-        T[1, 2*a - 2] = 1
-        T[2, 2*a - 1] = 1
-
-        T[3, 2*b - 3] = 1
-        T[4, 2*b - 2] = 1
-        T[5, 2*b - 1] = 1
     
+    if a > nodos or b > nodos: return 'index error'
+    
+    if a != 0:
+        T[0, 3*a - 3] = 1
+        T[1, 3*a - 2] = 1
+        T[2, 3*a - 1] = 1
+    if b != 0:
+        T[3, 3*b - 3] = 1
+        T[4, 3*b - 2] = 1
+        T[5, 3*b - 1] = 1
+    
+    print(T, '\n')
     return T

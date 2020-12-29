@@ -1,11 +1,11 @@
 ## Introduccion
 
-__pocket-β / β-beam__ es un programa pensado para facilitar el
-dialogo en torno a la toma de decisiones de proyectos ligados al
-dise;o de marcos de hormigon armado. Soluciona la busqueda de un
-perfil apropiado para reducir los ciclos necesarios de pruebas para
-encontrar un perfil que cumpla con caracteristicas de resistencia y
-caracteristicas economicas.
+__β-beam__ es un programa pensado para facilitar el dialogo en torno
+a la toma de decisiones de proyectos ligados al dise;o de marcos de
+hormigon armado. Soluciona la busqueda de un perfil apropiado para
+reducir los ciclos necesarios de pruebas para encontrar un perfil que
+cumpla con caracteristicas de resistencia y caracteristicas
+economicas.
 
 β-beam aspira a ser un programa que se desenvuelva en el entorno
 profesional al mismo nivel que podrian ofrecer otros programas
@@ -30,6 +30,7 @@ grande, eliminando las barreras de licencias extremadamente caras.
 
 - [ ] I/O:
     - [ ] Coordenadas.
+    - [ ] Esquema.
     - [ ] Cargas.
     - [ ] Presentacion de analisis.
 - [ ] Analisis matricial:
@@ -40,9 +41,14 @@ grande, eliminando las barreras de licencias extremadamente caras.
             - [ ] Multiplicacion.
         - [ ] Solucion de ecuaciones matriciales.
         - [ ] Matriz inversa.
-    - [ ] Rigideces locales.
-    - [ ] Compatibilidad geometrica.
+    - [x] Rigideces locales y globales.
+    - [x] Compatibilidad geometrica.
     - [x] Grados de libertad.
+    - [ ] Rigidez del sistema.
+    - [ ] Vector de fuerzas.
+    - [ ] Desplazamientos del sistema.
+    - [ ] Esfuerzos en coordenadas locales    
+    - [ ] Opcion de tramos rigidos.
 - [ ] Cubicacion.
 - [ ] Analisis sismo resistente.
     - [ ] Analisis estatico.

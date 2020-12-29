@@ -18,3 +18,10 @@ nos metimos en el horrible mundo de _numpy_, y es que es mas feo de
 lo imaginado, pero me ha sacado de un apuro. En este momento ya se ha
 traducido lo que se pudo rescatar del programa y se da pie al inicio
 de la automatizacion de las rutinas.
+
+__2020.12.29 - 03:21__
+
+no termino de entender como pasaron tantos dias... hay que empezar a
+juntar dioses para rezarles. Se acaba de terminar de definir un
+elemento generico para vigas y columnas. Ahora se esta trabajando en
+el input del usuario.

@@ -1,0 +1,39 @@
+loops: 20
+largo: 2700
+
+Tiempo promedio del script: 495.056969 s
+Tiempo promedio de rref() : 145.211961 s
+Tiempo promedio de A^-1*b : 1.194699 s
+Tiempo promedio de A\b    : 0.437468 s
+
+---- -- - -- ----
+
+loops: 100
+largo: 600
+
+Tiempo promedio del script: 9.880343 s
+Tiempo promedio de rref() : 1.535665 s
+Tiempo promedio de A^-1*b : 0.021294 s
+Tiempo promedio de A\b    : 0.012097 s
+
+---- -- - -- ----
+
+loops: 1000
+largo: 60
+
+Tiempo promedio del script: 0.092275 s
+Tiempo promedio de rref() : 0.009586 s
+Tiempo promedio de A^-1*b : 0.000302 s
+Tiempo promedio de A\b    : 0.000233 s
+
+---- -- - -- ----
+
+loops: 10000
+largo: 33
+
+Tiempo promedio del script: 0.029991 s
+Tiempo promedio de rref() : 0.006774 s
+Tiempo promedio de A^-1*b : 0.000204 s
+Tiempo promedio de A\b    : 0.000177 s
+
+---- -- - -- ----
