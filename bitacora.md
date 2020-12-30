@@ -25,3 +25,11 @@ no termino de entender como pasaron tantos dias... hay que empezar a
 juntar dioses para rezarles. Se acaba de terminar de definir un
 elemento generico para vigas y columnas. Ahora se esta trabajando en
 el input del usuario.
+
+__2020.12.30 - 03:06__
+
+sigue la pelea contra la creacion de la grilla para poder conectar
+los diferentes elementos. La interaccion con el usuario ya fue
+definida en lo que respecta al ingreso de informacion, solo falta
+la presentacion de datos, pero para esto es necesario terminar casi
+todo el proyecto.

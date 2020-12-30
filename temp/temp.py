@@ -1,26 +1,42 @@
-def GdL(bar='', a, b, nodos, tipo=''):
-    T = zeros([6, 3*nodos])
-    
-    # elseif x == 1 || y == 1
-    #     return "reacts not considered"
-    # elseif x == 19 || y == 19
-    #     return "reacts not considered"
-    # elif x > 20 or y > 20
-    #     return "index error"
-    
-    # x == 20 ? x-=1 : x
-    # y == 20 ? y-=1 : y
-    
-    if a > nodos or b > nodos: return 'index error'
-    
-    if a != 0:
-        T[0, 3*a - 3] = 1
-        T[1, 3*a - 2] = 1
-        T[2, 3*a - 1] = 1
-    if b != 0:
-        T[3, 3*b - 3] = 1
-        T[4, 3*b - 2] = 1
-        T[5, 3*b - 1] = 1
-    
-    print(T, '\n')
-    return T
+# recuperacion de datos
+
+with open('../IO/input.txt', encoding='utf-8') as i_text:
+    i_temp = i_text.readlines()
+
+dflt_op = [
+    'numero de pisos',
+    'numero habitaciones',
+    'distancia entre columnas',
+    'altura de piso',
+    'modulo de poisson 𝜈',
+    'resistencia del hormigon',
+    'carga viva',
+    'zona sismica',
+    'tipo de suelo',
+    'categoria de edificacion',
+    'resistencia del acero',
+    'tama;o max de columnas',
+    'altura max de viga'
+]
+
+dflt_in = [
+    '1', '1', '200', '300', '0.25', '19.5',
+    '0', 'def', 'def', 'def', 'def', 'def', 'def'
+]
+
+user_op = []
+user_in = []
+
+for i in i_temp:
+    if not i.startswith('\n'):
+        user_op.append(i.partition(':')[0].strip())
+        user_in.append(i.partition(':')[2].strip())
+print(user_in)
+if user_op != dflt_op: raise Exception('wena')
+
+for i in range(len(user_in)):
+    if user_in[i] == '':
+        user_in[i] = dflt_in[i]
+    elif user_in[i].isalpha() == False:
+        user_in[i] = float(user_in[i])
+print(user_in)

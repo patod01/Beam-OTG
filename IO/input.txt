@@ -1,0 +1,15 @@
+numero de pisos          :
+numero habitaciones      :
+distancia entre columnas :
+altura de piso           :
+
+modulo de poisson 𝜈      :
+resistencia del hormigon :
+carga viva               :
+
+zona sismica             :
+tipo de suelo            :
+categoría de edificación :
+resistencia del acero    :
+tamaño max de columnas   :
+altura max de viga       :

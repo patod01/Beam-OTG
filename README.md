@@ -29,9 +29,10 @@ grande, eliminando las barreras de licencias extremadamente caras.
 ## To-Do list:
 
 - [ ] I/O:
+    - [x] Ingreso de datos.
     - [ ] Coordenadas.
     - [ ] Esquema.
-    - [ ] Cargas.
+    - [ ] Cargas tributareas.
     - [ ] Presentacion de analisis.
 - [ ] Analisis matricial:
     - [ ] ~Algebra matricial:~
