@@ -33,3 +33,10 @@ los diferentes elementos. La interaccion con el usuario ya fue
 definida en lo que respecta al ingreso de informacion, solo falta
 la presentacion de datos, pero para esto es necesario terminar casi
 todo el proyecto.
+
+__2021.01.08 - 04:56__
+
+se arreglo un bug en el calculo del modulo de yung. Estamos a nada de
+reunirnos con el sensei. No se ha terminado nada pero se actualizaron
+hartas cosas y aprovecho de respaldar antes de un posible desastre.
+Ah! Y tenemos licencia!
