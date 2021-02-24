@@ -40,3 +40,16 @@ se arreglo un bug en el calculo del modulo de yung. Estamos a nada de
 reunirnos con el sensei. No se ha terminado nada pero se actualizaron
 hartas cosas y aprovecho de respaldar antes de un posible desastre.
 Ah! Y tenemos licencia!
+
+__2021.02.16 - 02:00__
+
+siendo hoy 78 de diciembre, he vuelto a recuperar la fe en el
+proyecto.
+
+__2021.02.19 - 03:45__
+
+nota mental: recuerda que 2.4\*3 != 7.2 y que \*\*0.5 es un loquillo.
+
+__2021.02.24 - 03:53__
+
+today is for surprises, my friend...
