@@ -1,19 +1,24 @@
-numero de pisos          : 1
-numero habitaciones      :1
-numero de marcos         :1
-altura de piso           :300
-distancia entre columnas :200
-distancia entre marcos   :0
+numero de pisos          : 2
+numero de vanos          : 3
+numero de marcos         : 4
+altura de piso           : 150
+distancia entre columnas : 120
+distancia entre marcos   : 120
+espesor de losas         : 15
 
-modulo de poisson 𝜈      :0.25
-resistencia del hormigon :19.5
+modulo de poisson 𝜈      : 0.25
+resistencia f'c hormigon : 19.5
 densidad del hormigon    : 2500
-carga viva               :0
+carga viva               : 500
 
-zona sismica             :
-tipo de suelo            :
-categoria de edificacion :
+zona sismica             : 3
+tipo de suelo            : E
+categoria de edificacion : II
+factor de modificacion R : 5.5
+porcentaje de sobrecarga : 0.25
 
-resistencia del acero    :
-tama;o max de columnas   :
-altura max de viga       :
+resistencia fy acero     : 4200
+ancho max de columnas    : 90
+ancho max de vigas       : 40
+altura max de vigas      : 90
+mismas barras en columnas: si

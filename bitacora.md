@@ -53,3 +53,20 @@ nota mental: recuerda que 2.4\*3 != 7.2 y que \*\*0.5 es un loquillo.
 __2021.02.24 - 03:53__
 
 today is for surprises, my friend...
+
+__2021.03.31 - 02:44__
+
+hace algun tiempo, cunado termine mi ramo de analisis matricial,
+quise hacer mi propia version de un programa. Esto ocurrio en algun
+momento del a;o 2017, cerca del final, asi que digamos 2018. Un bug
+que nunca pude encontrar termino con mis ganas de seguir trabajando
+en el. Hoy, despues de un poco mas de 3 a;os, ese programa funciona
+y me va a sacar de la universidad. Me retiro para ir a acostarme
+sintiendome como un dios.
+
+__2021.04.09 - 12:34__
+
+primer escrito de dia... y despues de dos colapsos de mi computador
+es que me vi obligado por el miedo a volver a respaldar despues de
+mas de un mes... hay tiempos para dejar de vivir al limite, pero aun
+no lo comprendo.

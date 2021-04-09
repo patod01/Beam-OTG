@@ -29,10 +29,10 @@ grande, eliminando las barreras de licencias extremadamente caras.
 ## To-Do list:
 
 - [ ] I/O:
-    - [x] Ingreso de datos.
+    - [ ] Ingreso de datos.
     - [ ] Coordenadas.
-    - [ ] Esquema.
-    - [ ] Cargas tributareas.
+    - [x] Esquema.
+    - [x] Cargas tributareas.
     - [ ] Presentacion de analisis.
 - [ ] Analisis matricial:
     - [ ] ~Algebra matricial:~
@@ -45,14 +45,15 @@ grande, eliminando las barreras de licencias extremadamente caras.
     - [x] Rigideces locales y globales.
     - [x] Compatibilidad geometrica.
     - [x] Grados de libertad.
-    - [ ] Rigidez del sistema.
-    - [ ] Vector de fuerzas.
-    - [ ] Desplazamientos del sistema.
-    - [ ] Esfuerzos en coordenadas locales    
+    - [x] Rigidez del sistema.
+    - [x] Vector de fuerzas.
+    - [x] Desplazamientos del sistema.
+    - [x] Esfuerzos en coordenadas locales    
     - [ ] Opcion de tramos rigidos.
-- [ ] Cubicacion.
+- [x] Cubicacion.
 - [ ] Analisis sismo resistente.
-    - [ ] Analisis estatico.
+    - [x] Analisis estatico.
+    - [ ] Periodo fundamental.
 - [ ] Optimizacion de perfiles.
 
 123456789012345678901234567890123456789012345678901234567890123456789
