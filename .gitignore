@@ -1,3 +1,5 @@
 *.def
 *.ods#
 *.bak
+samples/ejemplo5/*.prv
+samples/ejemplo5/marco.*

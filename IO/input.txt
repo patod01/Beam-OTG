@@ -1,15 +1,15 @@
-numero de pisos          : 2
+numero de pisos          : 4
 numero de vanos          : 3
 numero de marcos         : 4
-altura de piso           : 150
-distancia entre columnas : 120
-distancia entre marcos   : 120
+altura de piso           : 300
+distancia entre columnas : 700
+distancia entre marcos   : 700
 espesor de losas         : 15
 
 modulo de poisson 𝜈      : 0.25
-resistencia f'c hormigon : 19.5
+resistencia f'c hormigon : 25
 densidad del hormigon    : 2500
-carga viva               : 500
+sobrecarga de uso        : 500
 
 zona sismica             : 3
 tipo de suelo            : E

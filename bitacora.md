@@ -70,3 +70,7 @@ primer escrito de dia... y despues de dos colapsos de mi computador
 es que me vi obligado por el miedo a volver a respaldar despues de
 mas de un mes... hay tiempos para dejar de vivir al limite, pero aun
 no lo comprendo.
+
+__2021.04.13 - 11:11__
+
+sentencia de muerte enviada!! unas horas mas tarde...
