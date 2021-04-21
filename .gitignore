@@ -1,5 +1,13 @@
+#**!/?[a-b][one]\
 *.def
 *.ods#
 *.bak
-samples/ejemplo5/*.prv
-samples/ejemplo5/marco.*
+/samples/ejemplo5/marco.*
+/samples/ejemplo5/*.prv
+!/samples/ejemplo5/marco.sdb
+/samples/crack/
+#!/samples/crack/bake.bat
+#!/samples/crack/clean.bat
+#!/samples/crack/fap.rc
+#!/samples/crack/pAPP.c
+#!/samples/crack/sapo.ico

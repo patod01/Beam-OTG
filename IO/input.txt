@@ -14,11 +14,9 @@ sobrecarga de uso        : 500
 zona sismica             : 3
 tipo de suelo            : E
 categoria de edificacion : II
-factor de modificacion R : 5.5
+factor de modificacion R : 7
 porcentaje de sobrecarga : 0.25
 
-resistencia fy acero     : 4200
-ancho max de columnas    : 90
-ancho max de vigas       : 40
-altura max de vigas      : 90
-mismas barras en columnas: si
+ancho de columnas        : 90
+ancho de vigas           : 40
+altura de vigas          : 90
