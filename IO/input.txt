@@ -1,22 +1,24 @@
 numero de pisos          : 4
 numero de vanos          : 3
 numero de marcos         : 4
-altura de piso           : 300
-distancia entre columnas : 700
-distancia entre marcos   : 700
-espesor de losas         : 15
+altura de piso           : 300 [cm]
+distancia entre columnas : 700 [cm]
+distancia entre marcos   : 700 [cm]
+
+ancho de columnas        : 90 [cm]
+ancho de vigas           : 50 [cm]
+altura de vigas          : 90 [cm]
+espesor de losas         : 15 [cm]
 
 modulo de poisson 𝜈      : 0.25
-resistencia f'c hormigon : 25
-densidad del hormigon    : 2500
-sobrecarga de uso        : 500
+resistencia f'c hormigon : 25 [MPa]
+densidad del hormigon    : 2500 [kg/m3]
+precio hormigon          : 75000 [$/m3]
+precio acero             : 1000 [$/kg]
 
 zona sismica             : 3
 tipo de suelo            : E
 categoria de edificacion : II
 factor de modificacion R : 7
+sobrecarga de uso        : 500 [kg/m2]
 porcentaje de sobrecarga : 0.25
-
-ancho de columnas        : 90
-ancho de vigas           : 40
-altura de vigas          : 90
