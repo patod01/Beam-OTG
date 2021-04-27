@@ -74,3 +74,7 @@ no lo comprendo.
 __2021.04.13 - 11:11__
 
 sentencia de muerte enviada!! unas horas mas tarde...
+
+__2021.04.13 - 02:24__
+
+cuenta regresiva. Que pasara primero? Igual ser panadero suena bien.

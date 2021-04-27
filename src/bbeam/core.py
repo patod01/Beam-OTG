@@ -10,7 +10,7 @@ DESIGN = False
 KAPUT = 0
 
 def verDrift(): pass
-def optijandro(perfil=[], design=True): pass
+def optijandro(perfil=[], esfuerzos={}, design=True): pass
 def update(): pass
 
 def optimize():
@@ -22,7 +22,7 @@ def optimize():
         else:
             DESIGN = True
     while DESIGN:
-        costo, perfil_b = optijandro(perfil_a)
+        costo, perfil_b = optijandro(perfil_a, esfuerzos)
         if perfil_a != perfil_b:
             perfil_a = perfil_b
             update()
@@ -42,5 +42,5 @@ def optimize():
             c = costos.index(min(costos))
             perfil_a = perfiles[c]
             DESIGN = False
-            detalle = optijandro(perfil_a, DESIGN)
+            detalle = optijandro(perfil_a, esfuerzos, DESIGN)
     return
