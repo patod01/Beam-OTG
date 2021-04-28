@@ -1,22 +1,37 @@
-@keyframes Boo {
-    69% {
-        color: midnightblue;
-    }
+body {
+    margin-left: 1in;
+    margin-right: 1in;
+    margin-top: 3in;
+    font-family: Garamond;
+    font-size: 12pt;
+    text-align: justify;
 }
 
-#yo {
-    color: white;
-    font-weight: bold;
+#portada {
+    text-align: center;
+    margin-top: 2in;
+}
+
+h2 {page-break-before: always;}
+a {text-decoration: none; color: black;}
+ol {padding: 0; /*list-style-type: hiragana;*/}
+ul {list-style-type: disc;}
+i {font-family: "Times New Roman";}
+.img {text-align: center;}
+.lista2 {list-style-type: lower-alpha;}
+.indice2 {padding-left: 1cm;}
+
+.tabla {
     font-family: monospace;
-    text-decoration: none;
-    animation: Boo 4s infinite;
+    font-size: 9pt;
+    margin: auto;
+    text-align: center;
 }
 
-h1 {
-    text-shadow: 0 0 4px crimson, 0 0 8px darkblue;
+#bbeam {
+    font-family: monospace;
+    font-size: 33px;
+    text-shadow: 0 0 4px crimson, 0 0 7px darkblue;
 }
 
-.xxx {
-    text-decoration: none;
-    opacity: 0.33;
-}
+/*patod01 - Patricio Carrasco Vinagre*/

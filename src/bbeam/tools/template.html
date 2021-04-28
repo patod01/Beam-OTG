@@ -2,87 +2,164 @@
 <html>
 <head>
     <title>Reporte - β-beam</title>
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"> -->
     <link rel="stylesheet" type="text/css" href="pstyle.css">
 </head>
 <body>
 
-Reporte de Análisis y Diseño Estructural:<br>
-Vigas y Columnas
+<div id="portada">
+    <h1 id="titulo1">
+        Reporte de Análisis y Diseño Estructural:<br>
+        Vigas y Columnas
+    </h1>
 
-[foto1]
-[foto2]
-[foto3]
-[foto4]
+    <p>
+        <img src="marco_vista_c.svg"><img src="marco_vista_a.svg"><br>
+        <img src="marco_vista_d.svg"><img src="marco_vista_b.svg">
+    </p>
 
-Proyecto: [NOMBRE]<br>
-Desarrollado en β-beam
+    <h1 id="titulo2">
+        Proyecto: [NOMBRE]<br>
+        Desarrollado con <span id="bbeam">β-beam</span>
+    </h1>
+    <!-- <div style="page-break-after: always"></div> -->
+</div>
 
-<div style="page-break-after: always;"></div>
+<h2>Índice</h2>
+<ol>
+    <li><a href="#Geometría">Geometría</a></li>
+    <li><a href="#Combinaciones de carga">Combinaciones de carga</a></li>
+    <li><a href="#Análisis sísmico">Análisis sísmico</a></li>
+    <ol class="lista2 indice2">
+        <li><a href="#Clasificación">Clasificación</a></li>
+        <li><a href="#Peso propio y sobrecarga de uso">Peso propio y sobrecarga de uso</a></li>
+        <li><a href="#Resultados del análisis">Resultados del análisis</a></li>
+    </ol>
+    <li><a href="#Detallamiento de vigas y columnas">Detallamiento de vigas y columnas</a></li>
+    <ol class="lista2 indice2">
+        <li><a href="#Vigas">Vigas</a></li>
+        <li><a href="#Columnas">Columnas</a></li>
+    </ol>
+    <li><a href="#Esfuerzos">Esfuerzos</a></li>
+    <ol class="lista2 indice2">
+        <li><a href="#Esfuerzos nodales">Esfuerzos nodales</a></li>
+        <li><a href="#Diagramas de esfuerzo interno">Diagramas de esfuerzo interno</a></li>
+    </ol>
+</ol>
+<!-- <div style="page-break-after: always"></div> -->
 
-Resumen del proyecto
-Geometría
-La estructura detallada en este documento posee las siguientes características geométricas:
-Vanos por nivel: [VANOS].
-Número de pisos: [PISOS].
-Número de marcos: [MARCOS].
-Altura de piso: [h_pisos] [cm].
-Distancia entre ejes de columnas: [b_losas] [cm].
-Distancia entre marcos: [d_losas] [cm].
-Espesor de losas: [t_losas] [cm].
+<ol>
+    <h2 id="Geometría"><li>Geometría</li></h2>
+        <p>
+            La estructura detallada en este documento posee las siguientes características geométricas:
+        </p>
 
-[foto marco]
+        <ul>
+            <li>Vanos por nivel: [VANOS].</li>
+            <li>Número de pisos: [PISOS].</li>
+            <li>Número de marcos: [MARCOS].</li>
+            <li>Altura de piso: [h_pisos] [cm].</li>
+            <li>Distancia entre ejes de columnas: [b_losas] [cm].</li>
+            <li>Distancia entre marcos: [d_losas] [cm].</li>
+            <li>Espesor de losas: [t_losas] [cm].</li>
+        </ul>
 
-Combinaciones de carga
-Las combinaciones de carga empleadas siguen la metodología de verificación LRFD y se listan a continuación:
-1.4 D
-1.2 D + 1.6 L
-1.2 D ± 1.4 E + L
-0.9 D ± 1.4 E
-Para la verificación de drift se emplea el caso de carga: ± E
-Para el diseño por capacidad en vigas se emplea la combinación: 1.2 D + L
+        <p class="img"><img src="src/marco_2D.svg"></p>
 
-<div style="page-break-after: always;"></div>
+        <p>
+            Las columnas que componen al marco se enumeran de izquierda a derecha y en orden ascendente por nivel. Para las vigas se sigue la misma lógica, continuando la numeración de la última columna.
+        </p>
 
-Clasificación sísmica
-La estructura se proyecta en la zona sísmica [ZONA] sobre un suelo tipo [TIPO] y la categoría de edificación corresponde a Categoría [CATEGORIA]. Para estos antecedentes corresponden las siguientes variables:
-Factor de importancia I: [I].
-Aceleración efectiva A0: [A0] g.
-Parámetros dependientes del tipo de suelo: S = [S], T0 = [T0], T’ = [Tp], n = [n], p = [p].
-Coeficiente sísmico máximo Cmax: [Cmax].
-Coeficiente sísmico mínimo Cmin: [Cmin].
+        <div class="tabla">[tabla elementos]</div>
 
-Análisis sísmico
-Peso propio y sobrecarga de uso
-La estructura tiene un peso propio (D) total de [pesoP] [Tf]. Para la aplicación de la sobrecarga de uso, QL, equivalente a [Q_L] [kg/m2], se obtiene una carga viva (L) total de [pesoL] [Tf], cuya participación es del [prcL]% para el cálculo de la masa sísmica. La estructura tiene una masa sísmica total de [Psism] [Tf].
+    <h2 id="Combinaciones de carga"><li>Combinaciones de carga</li></h2>
+        <p>
+            Las combinaciones de carga empleadas siguen la metodología de verificación LRFD y se listan a continuación:
+        </p>
 
-Resultados del análisis
-El período fundamental de la estructura, T*, es [Tn] [s] y el coeficiente sísmico, C, es [C], lo cual resulta en un corte basal Q0 = [Q0] [Tf], generando en la estructura las siguientes cargas horizontales (Tf) por nivel en orden ascendente: [E]. Las cargas horizontales fueron calculadas mediante el  método de análisis estático
+        <ul>
+            <li>1.4 D</li>
+            <li>1.2 D + 1.6 L</li>
+            <li>1.2 D ± 1.4 E + L</li>
+            <li>0.9 D ± 1.4 E</li>
+        </ul>
 
-Los desplazamientos por nivel para los valores mencionados anteriormente y los respectivos drifts se presentan en la siguiente tabla:
+        <p>Para la verificación de drift se emplea el caso de carga:</p>
 
-[tabla drifts]
+        <ul><li>± E</li></ul>
+        
+        <p>Para el diseño por capacidad en vigas se emplea la combinación:</p>
+        <ul><li>1.2 D + L</li></ul>
+    <!-- <div style="page-break-after: always"></div> -->
 
-<div style="page-break-after: always;"></div>
+    <h2 id="Análisis sísmico"><li>Análisis sísmico</li></h2>
+        <ol class="lista2">
+            <h3 id="Clasificación"><li>Clasificación</li></h3>
+                <p>
+                    La estructura se proyecta en la zona sísmica [ZONA] sobre un suelo tipo [TIPO] y la categoría de edificación corresponde a Categoría [CATEGORIA]. Para estos antecedentes corresponden las siguientes variables:
+                </p>
 
-Detallamiento de vigas y columnas
-Esta es la página del alejandro… F
+                <ul>
+                    <li>Factor de importancia <i>I</i>: [I].</li>
+                    <li>Aceleración efectiva <i>A<sub>0</sub></i>: [A0] g.</li>
+                    <li>Parámetros dependientes del tipo de suelo: <i>S</i> = [S], <i>T<sub>0</sub></i> = [T0], <i>T’</i> = [Tp], <i>n</i> = [n], <i>p</i> = [p].</li>
+                    <li>Coeficiente sísmico máximo <i>C<sub>max</sub></i>: [Cmax].</li>
+                    <li>Coeficiente sísmico mínimo <i>C<sub>min</sub></i>: [Cmin].</li>
+                </ul>
 
-<div style="page-break-after: always;"></div>
+            <h3 id="Peso propio y sobrecarga de uso"><li>Peso propio y sobrecarga de uso</li></h3>
+                <p>
+                    La estructura tiene un peso propio (D) total de [pesoP] [Tf]. Para la aplicación de la sobrecarga de uso, <i>Q<sub>L</sub></i>, equivalente a [Q_L] [kg/m<sup>2</sup>], se obtiene una carga viva (L) total de [pesoL] [Tf], cuya participación es del [prcL]% para el cálculo de la masa sísmica. La masa sísmica total de la estructura es de [Psism] [Tf].
+                </p>
 
-Esfuerzos internos
-Resumen: esfuerzos nodales
-En la siguiente tabla se listan los esfuerzos en los extremos de cada elemento para todas las combinaciones de carga:
+            <h3 id="Resultados del análisis"><li>Resultados del análisis</li></h3>
+                <p>
+                    El período fundamental de la estructura, <i>T*</i>, es [Tn] [s] y el coeficiente sísmico, <i>C</i>, es [C], lo cual resulta en un corte basal <i>Q<sub>0</sub></i> = [Q0] [Tf], generando en la estructura las siguientes cargas horizontales (Tf) por nivel en orden ascendente: [E]. Las cargas horizontales fueron calculadas mediante el  método de análisis estático.
+                </p>
 
-[tabla esfuerzos]
+                <p>
+                    En la siguieente tabla, para los valores mencionados anteriormente, se presentan los desplazamientos horizontales y los drifts por nivel:
+                </p>
 
-<div style="page-break-after: always;"></div>
+                <div class="tabla">[tabla drifts]</div>
+        </ol>
+    <!-- <div style="page-break-after: always"></div> -->
 
-Diagramas de esfuerzo interno
-En este ítem se listan todos los diagramas de esfuerzo interno de los miembros de la estructuras, ordenados por: combinaciones de carga y tipo de elemento (columnas y después vigas).
+    <h2 id="Detallamiento de vigas y columnas"><li>Detallamiento de vigas y columnas</li></h2>
+        <p>Esta es la página del alejandro… F</p>
+        <ol class="lista2">
+            <h3 id="Vigas"><li>Vigas</li></h3>
+            <h3 id="Columnas"><li>Columnas</li></h3>
+        </ol>
+    <!-- <div style="page-break-after: always"></div> -->
+    
+    <h2 id="Esfuerzos"><li>Esfuerzos</li></h2>
+        <ol class="lista2">
+            <h3 id="Esfuerzos nodales"><li>Esfuerzos nodales</li></h3>
+                <p>
+                    En la siguiente tabla se listan los esfuerzos en los extremos de cada elemento para todas las combinaciones de carga:
+                </p>
 
-[diagrama]
-[i][j]
+                <div class="tabla">[tabla esfuerzos]</div>
+            <!-- <div style="page-break-after: always"></div> -->
 
-...
+            <h3 id="Diagramas de esfuerzo interno"><li>Diagramas de esfuerzo interno</li></h3>
+                <p>
+                    En este ítem se listan todos los diagramas de esfuerzo interno de los miembros de la estructuras, ordenados por: combinaciones de carga y tipo de elemento (columnas y después vigas).
+                </p>
+
+                <table class="tabla">
+                    <tr>
+                        <td colspan="2"><img src="src/diagrama"></td>
+                    </tr>
+                    <tr>
+                        <td>[i]</td>
+                        <td>[j]</td>
+                    </tr>
+                </table>
+            <!-- <div style="page-break-after: always"></div> -->
+        </ol>
+</ol>
+
 </body>
 </html>
