@@ -11,3 +11,5 @@
 #!/samples/crack/fap.rc
 #!/samples/crack/pAPP.c
 #!/samples/crack/sapo.ico
+__pycache__
+src/bbeam/test/*

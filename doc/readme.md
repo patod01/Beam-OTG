@@ -4,3 +4,6 @@ trolleos fuertes.
 
 La documentacion importante del programa y la usada para el chiste es
 `doc.ipynb`.
+
+En el archivo `aroM.ipynb` se encuentra el resumen de un desarrollo
+manual de analisis matricial.

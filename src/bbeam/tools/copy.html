@@ -1,0 +1,2252 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reporte - β-beam</title>
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"> -->
+    <link rel="stylesheet" type="text/css" href="pstyle.css">
+</head>
+<body>
+
+<div id="portada">
+    <h1 id="titulo1">
+        Reporte de Análisis y Diseño Estructural:<br>
+        Vigas y Columnas
+    </h1>
+
+    <div>
+        <img class="ima" src="src/marco_vista_c.png"><img class="ima" src="src/marco_vista_a.png"><br>
+        <img class="ima" src="src/marco_vista_d.png"><img class="ima" src="src/marco_vista_b.png">
+    </div>
+
+    <h1 id="titulo2">
+        Proyecto: [NOMBRE]<br>
+        Desarrollado con <span id="bbeam">β-beam</span>
+    </h1>
+    <!-- <div style="page-break-after: always"></div> -->
+</div>
+
+<h2>Índice</h2>
+<ol>
+    <li><a href="#Geometría">Geometría</a></li>
+    <li><a href="#Combinaciones de carga">Combinaciones de carga</a></li>
+    <li><a href="#Análisis sísmico">Análisis sísmico</a></li>
+    <ol class="lista2 indice2">
+        <li><a href="#Clasificación">Clasificación</a></li>
+        <li><a href="#Peso propio y sobrecarga de uso">Peso propio y sobrecarga de uso</a></li>
+        <li><a href="#Resultados del análisis">Resultados del análisis</a></li>
+    </ol>
+    <li><a href="#Detallamiento de vigas y columnas">Detallamiento de vigas y columnas</a></li>
+    <ol class="lista2 indice2">
+        <li><a href="#Vigas">Vigas</a></li>
+        <li><a href="#Columnas">Columnas</a></li>
+    </ol>
+    <li><a href="#Esfuerzos">Esfuerzos</a></li>
+    <ol class="lista2 indice2">
+        <li><a href="#Fuerzas y momentos de los miembros">Fuerzas y momentos de los miembros</a></li>
+        <li><a href="#Diagramas de esfuerzo interno">Diagramas de esfuerzo interno</a></li>
+    </ol>
+</ol>
+<!-- <div style="page-break-after: always"></div> -->
+
+<ol>
+    <h2 id="Geometría"><li>Geometría</li></h2>
+        <p>
+            La estructura detallada en este documento posee las siguientes características geométricas:
+        </p>
+
+        <ul>
+            <li>Vanos por nivel: 3</li>
+            <li>Número de pisos: 4</li>
+            <li>Número de marcos: 4</li>
+            <li>Altura de piso: 300 [cm].</li>
+            <li>Distancia entre ejes de columnas: 700 [cm].</li>
+            <li>Distancia entre marcos: 700 [cm].</li>
+            <li>Espesor de losas: 15 [cm].</li>
+        </ul>
+
+        <p><img class="imga" src="src/marco_2D.png"></p>
+
+        <p>
+            Las columnas que componen al marco se enumeran de izquierda a derecha y en orden ascendente por nivel. Para las vigas se sigue la misma lógica, continuando la numeración de la última columna.
+        </p>
+
+        <div class="tabla"><pre>
+elemento 01: COL  1 (i:  0, j:  1) en nivel 1
+elemento 02: COL  2 (i:  0, j:  2) en nivel 1
+elemento 03: COL  3 (i:  0, j:  3) en nivel 1
+elemento 04: COL  4 (i:  0, j:  4) en nivel 1
+elemento 17: VIGA 5 (i:  1, j:  2) en nivel 1
+elemento 18: VIGA 6 (i:  2, j:  3) en nivel 1
+elemento 19: VIGA 7 (i:  3, j:  4) en nivel 1
+elemento 05: COL  1 (i:  1, j:  5) en nivel 2
+elemento 06: COL  2 (i:  2, j:  6) en nivel 2
+elemento 07: COL  3 (i:  3, j:  7) en nivel 2
+elemento 08: COL  4 (i:  4, j:  8) en nivel 2
+elemento 20: VIGA 5 (i:  5, j:  6) en nivel 2
+elemento 21: VIGA 6 (i:  6, j:  7) en nivel 2
+elemento 22: VIGA 7 (i:  7, j:  8) en nivel 2
+elemento 09: COL  1 (i:  5, j:  9) en nivel 3
+elemento 10: COL  2 (i:  6, j: 10) en nivel 3
+elemento 11: COL  3 (i:  7, j: 11) en nivel 3
+elemento 12: COL  4 (i:  8, j: 12) en nivel 3
+elemento 23: VIGA 5 (i:  9, j: 10) en nivel 3
+elemento 24: VIGA 6 (i: 10, j: 11) en nivel 3
+elemento 25: VIGA 7 (i: 11, j: 12) en nivel 3
+elemento 13: COL  1 (i:  9, j: 13) en nivel 4
+elemento 14: COL  2 (i: 10, j: 14) en nivel 4
+elemento 15: COL  3 (i: 11, j: 15) en nivel 4
+elemento 16: COL  4 (i: 12, j: 16) en nivel 4
+elemento 26: VIGA 5 (i: 13, j: 14) en nivel 4
+elemento 27: VIGA 6 (i: 14, j: 15) en nivel 4
+elemento 28: VIGA 7 (i: 15, j: 16) en nivel 4
+
+        </pre></div>
+
+    <h2 id="Combinaciones de carga"><li>Combinaciones de carga</li></h2>
+        <p>
+            Las combinaciones de carga empleadas siguen la metodología de verificación LRFD y se listan a continuación:
+        </p>
+
+        <ul>
+            <li>1.4 D</li>
+            <li>1.2 D + 1.6 L</li>
+            <li>1.2 D ± 1.4 E + L</li>
+            <li>0.9 D ± 1.4 E</li>
+        </ul>
+
+        <p>Para la verificación de drift se emplea el caso de carga:</p>
+
+        <ul><li>± E</li></ul>
+        
+        <p>Para el diseño por capacidad en vigas se emplea la combinación:</p>
+        <ul><li>1.2 D + L</li></ul>
+    <!-- <div style="page-break-after: always"></div> -->
+
+    <h2 id="Análisis sísmico"><li>Análisis sísmico</li></h2>
+        <ol class="lista2">
+            <h3 id="Clasificación"><li>Clasificación</li></h3>
+                <p>
+                    La estructura se proyecta en la zona sísmica [ZONA] sobre un suelo tipo [TIPO] y la categoría de edificación corresponde a Categoría [CATEGORIA]. Para estos antecedentes corresponden las siguientes variables:
+                </p>
+
+                <ul>
+                    <li>Factor de importancia <i>I</i>: 1.</li>
+                    <li>Aceleración efectiva <i>A<sub>0</sub></i>: 0.4 g.</li>
+                    <li>Parámetros dependientes del tipo de suelo: <i>S</i> = 1.3, <i>T<sub>0</sub></i> = 1.2, <i>T’</i> = 1.35, <i>n</i> = 1.8, <i>p</i> = 1.0.</li>
+                    <li>Coeficiente sísmico máximo <i>C<sub>max</sub></i>: 0.182.</li>
+                    <li>Coeficiente sísmico mínimo <i>C<sub>min</sub></i>: 0.087.</li>
+                </ul>
+
+            <h3 id="Peso propio y sobrecarga de uso"><li>Peso propio y sobrecarga de uso</li></h3>
+                <p>
+                    La estructura tiene un peso propio (D) total de [pesoP] [Tf]. Para la aplicación de la sobrecarga de uso, <i>Q<sub>L</sub></i>, equivalente a [Q_L] [kg/m<sup>2</sup>], se obtiene una carga viva (L) total de [pesoL] [Tf], cuya participación es del [prcL]% para el cálculo de la masa sísmica. La masa sísmica total de la estructura es de [Psism] [Tf].
+                </p>
+
+            <h3 id="Resultados del análisis"><li>Resultados del análisis</li></h3>
+                <p>
+                    El período fundamental de la estructura, <i>T*</i>, es 0.25 [s] y el coeficiente sísmico utilizado, <i>C</i>, vale 0.182, lo cual resulta en un corte basal <i>Q<sub>0</sub></i> = 196 [Tf], generando en la estructura las siguientes cargas horizontales (Tf) por nivel en orden ascendente: 27.06, 32.1, 41.83 y 95.01. Las cargas horizontales fueron calculadas mediante el  método de análisis estático.
+                </p>
+
+                <p>
+                    En la siguieente tabla, para los valores mencionados anteriormente, se presentan los desplazamientos horizontales y los drifts por nivel:
+                </p>
+
+                <div class="tabla"><pre>
+                                       [mm]        [mm]        [‰]
+fila         combo        nivel        δmax        δmin      drift
+==================================================================
+1              E          (01)       2.8331      2.8196      0.944
+------------------------------------------------------------------
+2              E          (02)       7.6070      7.5971      1.596
+------------------------------------------------------------------
+3              E          (03)      12.5343     12.5285      1.646
+------------------------------------------------------------------
+4              E          (04)      16.0287     16.0008      1.167
+------------------------------------------------------------------
+5             - E         (01)      -2.8331     -2.8196     -0.944
+------------------------------------------------------------------
+6             - E         (02)      -7.6070     -7.5971     -1.596
+------------------------------------------------------------------
+7             - E         (03)     -12.5343    -12.5285     -1.646
+------------------------------------------------------------------
+8             - E         (04)     -16.0287    -16.0008     -1.167
+------------------------------------------------------------------
+
+                </pre></div>
+        </ol>
+    <!-- <div style="page-break-after: always"></div> -->
+
+    <h2 id="Detallamiento de vigas y columnas"><li>Detallamiento de vigas y columnas</li></h2>
+        <p class="cons">
+Costo de acero 1000 [$/kg]
+Costo de hormigón 75000 [$/m3]
+Costo vigas $ 4378794
+Costo columnas $ 4912159
+Costo total $ 9290954
+        </p>
+        <ol class="lista2">
+            <h3 id="Vigas"><li>Vigas</li></h3>
+            <div class="cons"><pre>
+Reporte de diseño y cubicación de la estructura
+cantidad pisos 4cantidad vigas tipo por piso 1
+
+Viga n° 1Viga tipo del piso 1,
+
+Dimensiones
+Largo : 7.25 [m]Alto : 70 [cm]Ancho : 35 [cm]
+Refuerzo longitudinal
+Armadura superior principal2barras Ø22[cm], 1 barra Ø 25[mm] en la posición y = 5 [cm], área = 12.51 [cm2]
+Armadura suplementaria2barras Ø22 [cm] , 1 barra Ø 22[mm] en la posición y = 11.25 [cm], área = 11.4 [cm2]
+Armadura lateral2 barras Ø12[mm] en la posición y = 29.0cm, área = 2.26 [cm2]2 barras Ø12[mm] en la posición y = 47.0cm, área = 2.26 [cm2]
+Armadura inferior principal2 barras Ø 28 [cm] 
+
+CuantíasSuperior = 0.0105Inferior = 0.0054
+Cubicación de acero en barras longitudinales.
+Largos de suples : 0.25lo : 181.2 [cm]0.3lo : 217.5 [cm]kg de barras de suples : 94.2[kg]kg de otras barras : 536.9[kg]
+Volumen de hormigón : 5.32875[m3]
+Costo de acero: $ 631100.0
+Costo de hormigón :  $399656.25
+Barras superiores : 
+Longitud de traslapo de armadura superior : 160.6[cm]Desarrollo de gancho : 39.1[cm]Gancho : 60.3[cm]Diámetro : 25[mm]12db : 30.0[cm]
+Barras suplementarias : 
+Desarrollo de gancho : 34.4[cm]Gancho : 52.5[cm]Diámetro : 22[mm]12db : 26.4[cm]
+Barras laterales : 
+Longitud de traslapo de armadura lateral : 48.0[cm]Desarrollo de gancho : 18.8[cm]Gancho : 26.4[cm]Diámetro : 12.0[mm]12db : 14.4[cm]
+Barras inferiores : 
+Longitud de traslapo de armadura inferior : 138.4[cm]Desarrollo de gancho : 43.8[cm]Gancho : 68.2[cm]Diámetro : 28[mm]12db : 33.6[cm]
+Refuerzo transversal
+Zonas de rótula plástica, de 0 a 140 [cm] y 585.0 a 725.0 [cm]:Diámetro : 10 [cm]N° ramas : 3Estribos = 1Largo de estribo n° 1 = 180.21 [cm]Traba central: siLargo de traba = 93.78 [cm]Espaciamiento : 13 [cm]N° estribos : 10 en cada extremoVolumen de acero en zona de rótulas plásticas : 4517.1 [cm3]Peso del acero 35.5 [kg]
+
+Zonas central, de 140 a 585.0 [cm]:Diámetro :  10 [cm]N° ramas : 2longitud de empalme barras inferiores : 160.6 [cm]longitud de empalme barras superiores : 138.4 [cm]espaciamiento normal : 12 [cm]espaciamiento zona de empalme : 10[cm]Largo de estribo n° 1 = 180.21 [cm]Traba central: noEspaciamiento : 12 [cm]N° estribos : 42Volumen de acero en zona central : 5943.0 [cm3]Peso del acero70.9[kg]
+Trabas HorizontalesN° Trabas por estribo = 3N° de estribos donde va traba = 63Largo trabas = 58.78 [cm]Volumen de acero en trabas horizontales : 12553.6 [cm3]Peso del acero : 98.5 [kg]
+Acero total : 204.9 [kg]Hormigón total : 5.33 [m3]Costo hormigón : $ 399656.25Costo acero : $ 836000.0Costo total de vigas por piso : $ 1235656.25Resultados del análisis
+FlexiónØMn+ = 56.1 [tf-m]ØMn- = -35.3 [tf-m]F.U. mayor =  93.0 %
+CorteØVn1 = 49.5 [tf]F.U.1 = 90.2 %ØVn2 = 35.7 [tf]F.U.2 = 93.7 %
+
+Viga n° 2Viga tipo del piso 2,
+
+Dimensiones
+Largo : 7.3 [m]Alto : 70 [cm]Ancho : 35 [cm]
+Refuerzo longitudinal
+Armadura superior principal2barras Ø22[cm], 1 barra Ø 25[mm] en la posición y = 5 [cm], área = 12.51 [cm2]
+Armadura suplementaria2barras Ø22 [cm] , 1 barra Ø 22[mm] en la posición y = 11.25 [cm], área = 11.4 [cm2]
+Armadura lateral2 barras Ø12[mm] en la posición y = 29.0cm, área = 2.26 [cm2]2 barras Ø12[mm] en la posición y = 47.0cm, área = 2.26 [cm2]
+Armadura inferior principal2 barras Ø 28 [cm] 
+
+CuantíasSuperior = 0.0105Inferior = 0.0054
+Cubicación de acero en barras longitudinales.
+Largos de suples : 0.25lo : 182.5 [cm]0.3lo : 219.0 [cm]kg de barras de suples : 93.8[kg]kg de otras barras : 538.0[kg]
+Volumen de hormigón : 5.3655[m3]
+Costo de acero: $ 631800.0
+Costo de hormigón :  $402412.5
+Barras superiores : 
+Longitud de traslapo de armadura superior : 160.6[cm]Desarrollo de gancho : 39.1[cm]Gancho : 60.3[cm]Diámetro : 25[mm]12db : 30.0[cm]
+Barras suplementarias : 
+Desarrollo de gancho : 34.4[cm]Gancho : 52.5[cm]Diámetro : 22[mm]12db : 26.4[cm]
+Barras laterales : 
+Longitud de traslapo de armadura lateral : 48.0[cm]Desarrollo de gancho : 18.8[cm]Gancho : 26.4[cm]Diámetro : 12.0[mm]12db : 14.4[cm]
+Barras inferiores : 
+Longitud de traslapo de armadura inferior : 138.4[cm]Desarrollo de gancho : 43.8[cm]Gancho : 68.2[cm]Diámetro : 28[mm]12db : 33.6[cm]
+Refuerzo transversal
+Zonas de rótula plástica, de 0 a 140 [cm] y 590.0 a 730.0 [cm]:Diámetro : 10 [cm]N° ramas : 3Estribos = 1Largo de estribo n° 1 = 180.21 [cm]Traba central: siLargo de traba = 93.78 [cm]Espaciamiento : 13 [cm]N° estribos : 10 en cada extremoVolumen de acero en zona de rótulas plásticas : 4517.1 [cm3]Peso del acero 35.5 [kg]
+
+Zonas central, de 140 a 590.0 [cm]:Diámetro :  10 [cm]N° ramas : 2longitud de empalme barras inferiores : 160.6 [cm]longitud de empalme barras superiores : 138.4 [cm]espaciamiento normal : 12 [cm]espaciamiento zona de empalme : 10[cm]Largo de estribo n° 1 = 180.21 [cm]Traba central: noEspaciamiento : 12 [cm]N° estribos : 42Volumen de acero en zona central : 5943.0 [cm3]Peso del acero70.9[kg]
+Trabas HorizontalesN° Trabas por estribo = 3N° de estribos donde va traba = 63Largo trabas = 58.78 [cm]Volumen de acero en trabas horizontales : 12553.6 [cm3]Peso del acero : 98.5 [kg]
+Acero total : 204.9 [kg]Hormigón total : 5.37 [m3]Costo hormigón : $ 402412.5Costo acero : $ 836700.0Costo total de vigas por piso : $ 1239112.5Resultados del análisis
+FlexiónØMn+ = 56.1 [tf-m]ØMn- = -35.3 [tf-m]F.U. mayor =  92.9 %
+CorteØVn1 = 49.5 [tf]F.U.1 = 88.9 %ØVn2 = 35.7 [tf]F.U.2 = 92.9 %
+
+Viga n° 3Viga tipo del piso 3,
+
+Dimensiones
+Largo : 7.35 [m]Alto : 70 [cm]Ancho : 30 [cm]
+Refuerzo longitudinal
+Armadura superior principal2barras Ø28[cm]
+Armadura suplementaria2barras Ø22 [cm] , 1 barra Ø 18[mm] en la posición y = 12.0 [cm], área = 10.15 [cm2]
+Armadura lateral2 barras Ø12[mm] en la posición y = 30.0cm, área = 2.26 [cm2]2 barras Ø12[mm] en la posición y = 48.0cm, área = 2.26 [cm2]
+Armadura inferior principal2 barras Ø 22 [cm] , 1 barra Ø 22[mm] en la posición y = 65 [cm], área = 11.4 [cm2]
+
+CuantíasSuperior = 0.0115Inferior = 0.0058
+Cubicación de acero en barras longitudinales.
+Largos de suples : 0.25lo : 183.8 [cm]0.3lo : 220.5 [cm]kg de barras de suples : 83.2[kg]kg de otras barras : 514.7[kg]
+Volumen de hormigón : 4.6305[m3]
+Costo de acero: $ 597900.0
+Costo de hormigón :  $347287.5
+Barras superiores : 
+Longitud de traslapo de armadura superior : 179.9[cm]Desarrollo de gancho : 43.8[cm]Gancho : 68.2[cm]Diámetro : 28[mm]12db : 33.6[cm]
+Barras suplementarias : 
+Desarrollo de gancho : 34.4[cm]Gancho : 52.5[cm]Diámetro : 22[mm]12db : 26.4[cm]
+Barras laterales : 
+Longitud de traslapo de armadura lateral : 48.0[cm]Desarrollo de gancho : 18.8[cm]Gancho : 26.4[cm]Diámetro : 12.0[mm]12db : 14.4[cm]
+Barras inferiores : 
+Longitud de traslapo de armadura inferior : 108.7[cm]Desarrollo de gancho : 34.4[cm]Gancho : 52.5[cm]Diámetro : 22[mm]12db : 26.4[cm]
+Refuerzo transversal
+Zonas de rótula plástica, de 0 a 140 [cm] y 595.0 a 735.0 [cm]:Diámetro : 10 [cm]N° ramas : 2Estribos = 1Largo de estribo n° 1 = 180.21 [cm]Traba central: noEspaciamiento : 9 [cm]N° estribos : 16 en cada extremoVolumen de acero en zona de rótulas plásticas : 4386.5 [cm3]Peso del acero 34.4 [kg]
+
+Zonas central, de 140 a 595.0 [cm]:Diámetro :  10 [cm]N° ramas : 2longitud de empalme barras inferiores : 179.9 [cm]longitud de empalme barras superiores : 108.7 [cm]espaciamiento normal : 13 [cm]espaciamiento zona de empalme : 10[cm]Largo de estribo n° 1 = 180.21 [cm]Traba central: noEspaciamiento : 13 [cm]N° estribos : 41Volumen de acero en zona central : 5801.5 [cm3]Peso del acero45.5[kg]
+Trabas HorizontalesN° Trabas por estribo = 3N° de estribos donde va traba = 72Largo trabas = 53.78 [cm]Volumen de acero en trabas horizontales : 13126.6 [cm3]Peso del acero : 103.0 [kg]
+Acero total : 182.9 [kg]Hormigón total : 4.63 [m3]Costo hormigón : $ 347287.5Costo acero : $ 780800.0Costo total de vigas por piso : $ 1128087.5Resultados del análisis
+FlexiónØMn+ = 52.5 [tf-m]ØMn- = -33.4 [tf-m]F.U. mayor =  92.5 %
+CorteØVn1 = 47.6 [tf]F.U.1 = 91.6 %ØVn2 = 33.0 [tf]F.U.2 = 98.1 %
+
+Viga n° 4Viga tipo del piso 4,
+
+Dimensiones
+Largo : 7.4 [m]Alto : 70 [cm]Ancho : 30 [cm]
+Refuerzo longitudinal
+Armadura superior principal2barras Ø36[cm]
+Armadura suplementaria2barras Ø36 [cm] 
+Armadura lateral2 barras Ø12[mm] en la posición y = 31.0cm, área = 2.26 [cm2]2 barras Ø12[mm] en la posición y = 48.0cm, área = 2.26 [cm2]
+Armadura inferior principal2 barras Ø 18 [cm] , 1 barra Ø 22[mm] en la posición y = 65 [cm], área = 8.89 [cm2]
+
+CuantíasSuperior = 0.0209Inferior = 0.0046
+Cubicación de acero en barras longitudinales.
+Largos de suples : 0.25lo : 185.0 [cm]0.3lo : 222.0 [cm]kg de barras de suples : 177.8[kg]kg de otras barras : 640.3[kg]
+Volumen de hormigón : 4.662[m3]
+Costo de acero: $ 818000.0
+Costo de hormigón :  $349650.0
+Barras superiores : 
+Longitud de traslapo de armadura superior : 231.2[cm]Desarrollo de gancho : 56.3[cm]Gancho : 89.1[cm]Diámetro : 36[mm]12db : 43.2[cm]
+Barras suplementarias : 
+Desarrollo de gancho : 56.3[cm]Gancho : 89.1[cm]Diámetro : 36[mm]12db : 43.2[cm]
+Barras laterales : 
+Longitud de traslapo de armadura lateral : 48.0[cm]Desarrollo de gancho : 18.8[cm]Gancho : 26.4[cm]Diámetro : 12.0[mm]12db : 14.4[cm]
+Barras inferiores : 
+Longitud de traslapo de armadura inferior : 123.5[cm]Desarrollo de gancho : 39.1[cm]Gancho : 60.3[cm]Diámetro : 25[mm]12db : 30.0[cm]
+Refuerzo transversal
+Zonas de rótula plástica, de 0 a 140 [cm] y 600.0 a 740.0 [cm]:Diámetro : 10 [cm]N° ramas : 2Estribos = 1Largo de estribo n° 1 = 180.21 [cm]Traba central: noEspaciamiento : 10 [cm]N° estribos : 14 en cada extremoVolumen de acero en zona de rótulas plásticas : 3962.0 [cm3]Peso del acero 31.1 [kg]
+
+Zonas central, de 140 a 600.0 [cm]:Diámetro :  10 [cm]N° ramas : 2longitud de empalme barras inferiores : 231.2 [cm]longitud de empalme barras superiores : 123.5 [cm]espaciamiento normal : 16 [cm]espaciamiento zona de empalme : 10[cm]Largo de estribo n° 1 = 180.21 [cm]Traba central: noEspaciamiento : 16 [cm]N° estribos : 42Volumen de acero en zona central : 5943.0 [cm3]Peso del acero46.7[kg]
+Trabas HorizontalesN° Trabas por estribo = 3N° de estribos donde va traba = 70Largo trabas = 53.78 [cm]Volumen de acero en trabas horizontales : 12762.0 [cm3]Peso del acero : 100.2 [kg]
+Acero total : 178.0 [kg]Hormigón total : 4.66 [m3]Costo hormigón : $ 349650.0Costo acero : $ 996000.0Costo total de vigas por piso : $ 1345650.0Resultados del análisis
+FlexiónØMn+ = 77.3 [tf-m]ØMn- = -31.2 [tf-m]F.U. mayor =  89.9 %
+CorteØVn1 = 42.9 [tf]F.U.1 = 83.8 %ØVn2 = 26.8 [tf]F.U.2 = 92.1 %
+
+            </pre></div>
+            <h3 id="Columnas"><li>Columnas</li></h3>
+            <div class="cons"><pre>
+Nota: todas las columnas son simétricas, por lo tanto, su ancho y alto es igual.
+Por otro lado, las trabas y/o estribos interiores perpendiculares al eje x se replican al eje y
+Columna
+
+
+Piso N° 1
+Tipo : externa 
+
+
+Dimensiones
+
+Largo :  3 [m]
+Alto :  55 [cm]
+Ancho :  55 [cm]
+
+Refuerzo longitudinal
+            
+
+5 barras Ø 16 [mm] en la posición y = 5 [cm], área = 10.055 [cm2]
+2 barras Ø 16 [mm] en la posición y = 16 [cm], área = 4.022 [cm2]
+2 barras Ø 16 [mm] en la posición y = 27 [cm], área = 4.022 [cm2]
+2 barras Ø 16 [mm] en la posición y = 38 [cm], área = 4.022 [cm2]
+5 barras Ø 16 [mm] en la posición y = 50 [cm], área = 10.055 [cm2]
+
+Cuantía =  0.01064 
+
+
+Uniones y remates
+
+Columna para zonas laterales
+
+Para unión superior
+
+Longitud de empalme unión viga-columna =  31.9 [cm]
+
+Longitud de gancho-remate =  [162.2, 122.8] [cm]
+
+
+Refuerzo transversal
+
+
+Zonas de rótula plástica y nodo
+
+
+Ubicación de nodo y zona de RP superior: de 170 [cm] a  300 [cm]:
+
+Ubicación de zona de RP inferior: de 0 a 55 [cm]:
+N° ramas :  3
+N° de estribos rótulas :  7
+Espaciamiento :  8 [cm]
+N° Estribos nodo :  11
+
+Refuerzo exterior
+
+Diámetro estribo exterior:  10 [cm]
+Largo del estribo exterior 200.21 [cm]
+Ubicación entre ejes de barras horizontales: x = 5 [cm] y x = 50 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 50 [cm]
+
+Refuerzo interior
+
+Diámetro de estribos y trabas interiores 10 [cm]
+Largo de traba interior n°1 = 78.78 [cm]
+Ubicación entre ejes de barras horizontales: x = 27 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 50 [cm]
+
+
+Zona central
+
+
+Ubicación superior: 137.0 [cm] - 170 [cm]
+
+Ubicación inferior: 55 [cm] - 88.0 [cm]
+N° ramas :  3
+N° de estribos por extremo:  3
+Espaciamiento :  10 [cm]
+
+Refuerzo exterior
+
+Diámetro estribo exterior:  12 [cm]
+Largo del estribo exterior 205.25 [cm]
+Ubicación entre ejes de barras horizontales: x = 5 [cm] y x = 50 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 50 [cm]
+
+Refuerzo interior
+
+Diámetro de estribos y trabas interiores 10 [cm]
+Largo de traba interior n°1 = 78.78 [cm]
+Ubicación entre ejes de barras horizontales: x = 27 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 50 [cm]
+
+
+Empalme central
+
+
+Ubicación : de 137.0 [cm] - 88.0 [cm]
+N° ramas :  3
+N° de estribos :  5
+Espaciamiento :  9 [cm]
+
+Refuerzo exterior
+
+Diámetro estribo exterior:  10 [cm]
+Largo del estribo exterior 200.21 [cm]
+Ubicación entre ejes de barras horizontales: x = 5 [cm] y x = 50 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 50 [cm]
+
+Refuerzo interior
+
+Diámetro de estribos y trabas interiores 10 [cm]
+
+Largo de traba interior n°1 = 78.78 [cm]
+Ubicación entre ejes de barras horizontales: x = 27 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 50 [cm]
+Peso total de estribos :  22.0 [kg]
+Peso total barras longitudinales :  13.1 [kg]
+Volumen Hormigón :  0.9075 [m3]
+Costo acero : $ 110200.0
+Costo hormigón : $ 68062.5
+Costo total de columna tipo: $ 178262.5
+
+
+Resultados
+
+Flexión
+
+Mayor excentricidad 2.8 cm
+
+Momentos
+
+Mu_max =  44.37 [tf-m]
+Momento nominal ajustado a Mu y Pu máximos
+ØMn1 =  49.6 [tf-m]
+Momento nominal ajustado a Mu máximo debido a mayor excentricidad:
+ØMn2 =  3.1 [tf-m]
+
+Cargas
+
+Pu_max =  111.87 [tf]
+Pu_min =  -38.7 [tf]
+Carga nominal que verifica Pu_max:
+ØPn1 =  124.9 [tf]
+Carga nominal que verifica Pu_min:
+ØPn2 =  -109.3 [tf]
+
+F.U. 1 =  89.6 %
+F.U. 2 =  35.4 %
+
+Corte
+
+Corte en zona de rótula plástica
+ØVn1 =  61.8 [tf]
+F.U.1 =  66.5 %
+
+Corte en zona central
+ØVn2 =  64.0 [tf]
+F.U.2 =  64.3 %
+
+Corte en zona de empalme
+ØVn2 =  55.0 [tf]
+F.U.2 =  74.8 %
+
+
+
+Columna
+
+
+Piso N° 2
+Tipo : externa 
+
+
+Dimensiones
+
+Largo :  3 [m]
+Alto :  50 [cm]
+Ancho :  50 [cm]
+
+Refuerzo longitudinal
+
+5 barras Ø 16 [mm] en la posición y = 5 [cm], área = 10.055 [cm2]
+2 barras Ø 16 [mm] en la posición y = 15 [cm], área = 4.022 [cm2]
+2 barras Ø 16 [mm] en la posición y = 25 [cm], área = 4.022 [cm2]
+2 barras Ø 16 [mm] en la posición y = 35 [cm], área = 4.022 [cm2]
+5 barras Ø 16 [mm] en la posición y = 45 [cm], área = 10.055 [cm2]
+
+Cuantía =  0.01287 
+
+
+Uniones y remates
+
+Columna para zonas laterales
+
+Para unión superior
+
+Longitud de gancho-remate =  [162.2, 122.8] [cm]
+Para unión inferior
+
+Longitud de empalme unión viga-columna =  31.9 [cm]
+
+
+
+Refuerzo transversal
+
+
+Zonas de rótula plástica y nodo
+
+
+Ubicación de nodo y zona de RP superior: de 175 [cm] a  300 [cm]:
+
+Ubicación de zona de RP inferior: de 0 a 50 [cm]:
+N° ramas :  3
+N° de estribos rótulas :  7
+Espaciamiento :  8 [cm]
+N° Estribos nodo :  11
+
+Refuerzo exterior
+
+Diámetro estribo exterior:  10 [cm]
+Largo del estribo exterior 180.21 [cm]
+Ubicación entre ejes de barras horizontales: x = 5 [cm] y x = 45 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 45 [cm]
+
+Refuerzo interior
+
+Diámetro de estribos y trabas interiores 10 [cm]
+Largo de traba interior n°1 = 73.78 [cm]
+Ubicación entre ejes de barras horizontales: x = 25 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 45 [cm]
+
+
+Zona central
+
+
+Ubicación superior: 137.0 [cm] - 175 [cm]
+
+Ubicación inferior: 50 [cm] - 88.0 [cm]
+N° ramas :  3
+N° de estribos por extremo:  4
+Espaciamiento :  10 [cm]
+
+Refuerzo exterior
+
+Diámetro estribo exterior:  10 [cm]
+Largo del estribo exterior 180.21 [cm]
+Ubicación entre ejes de barras horizontales: x = 5 [cm] y x = 45 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 45 [cm]
+
+Refuerzo interior
+
+Diámetro de estribos y trabas interiores 10 [cm]
+Largo de traba interior n°1 = 73.78 [cm]
+Ubicación entre ejes de barras horizontales: x = 25 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 45 [cm]
+
+
+Empalme central
+
+
+Ubicación : de 137.0 [cm] - 88.0 [cm]
+N° ramas :  3
+N° de estribos :  5
+Espaciamiento :  9 [cm]
+
+Refuerzo exterior
+
+Diámetro estribo exterior:  10 [cm]
+Largo del estribo exterior 180.21 [cm]
+Ubicación entre ejes de barras horizontales: x = 5 [cm] y x = 45 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 45 [cm]
+
+Refuerzo interior
+
+Diámetro de estribos y trabas interiores 10 [cm]
+
+Largo de traba interior n°1 = 73.78 [cm]
+Ubicación entre ejes de barras horizontales: x = 25 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 45 [cm]
+Peso total de estribos :  20.2 [kg]
+Peso total barras longitudinales :  13.1 [kg]
+Volumen Hormigón :  0.75 [m3]
+Costo acero : $ 108300.0
+Costo hormigón : $ 56250.0
+Costo total de columna tipo: $ 164550.0
+
+
+Resultados
+
+Flexión
+
+Mayor excentricidad 1.9 cm
+
+Momentos
+
+Mu_max =  32.73 [tf-m]
+Momento nominal ajustado a Mu y Pu máximos
+ØMn1 =  40.1 [tf-m]
+Momento nominal ajustado a Mu máximo debido a mayor excentricidad:
+ØMn2 =  7.5 [tf-m]
+
+Cargas
+
+Pu_max =  80.16 [tf]
+Pu_min =  21.5 [tf]
+Carga nominal que verifica Pu_max:
+ØPn1 =  98.2 [tf]
+Carga nominal que verifica Pu_min:
+ØPn2 =  394.1 [tf]
+
+F.U. 1 =  81.6 %
+F.U. 2 =  5.5 %
+
+Corte
+
+Corte en zona de rótula plástica
+ØVn1 =  55.6 [tf]
+F.U.1 =  64.6 %
+
+Corte en zona central
+ØVn2 =  44.5 [tf]
+F.U.2 =  80.8 %
+
+Corte en zona de empalme
+ØVn2 =  49.5 [tf]
+F.U.2 =  72.7 %
+
+
+
+Columna
+
+
+Piso N° 1
+Tipo : externa 
+
+
+Dimensiones
+
+Largo :  3 [m]
+Alto :  50 [cm]
+Ancho :  50 [cm]
+
+Refuerzo longitudinal
+
+4 barras Ø 18 [mm] en la posición y = 5 [cm], área = 10.18 [cm2]
+2 barras Ø 18 [mm] en la posición y = 18 [cm], área = 5.09 [cm2]
+2 barras Ø 18 [mm] en la posición y = 32 [cm], área = 5.09 [cm2]
+4 barras Ø 18 [mm] en la posición y = 45 [cm], área = 10.18 [cm2]
+
+Cuantía =  0.01222 
+
+
+Uniones y remates
+
+Columna para zonas centrales
+
+Para unión superior
+
+Longitud de empalme unión viga-columna =  35.9 [cm]
+
+
+
+Refuerzo transversal
+
+
+Zonas de rótula plástica y nodo
+
+
+Ubicación de nodo y zona de RP superior: de 175 [cm] a  300 [cm]:
+
+Ubicación de zona de RP inferior: de 0 a 50 [cm]:
+N° ramas :  4
+N° de estribos rótulas :  6
+Espaciamiento :  9 [cm]
+N° Estribos nodo :  13
+
+Refuerzo exterior
+
+Diámetro estribo exterior:  10 [cm]
+Largo del estribo exterior 180.21 [cm]
+Ubicación entre ejes de barras horizontales: x = 5 [cm] y x = 45 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 45 [cm]
+
+Refuerzo interior
+
+Diámetro de estribos interiores 10 [cm]
+Largo de estribo interior n° 1 = 128.21 [cm]
+Ubicación entre ejes de barras horizontales: x = 18 [cm] y x = 32 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 45 [cm]
+
+
+Zona central
+
+
+Ubicación superior: 140.0 [cm] - 175 [cm]
+
+Ubicación inferior: 50 [cm] - 85.0 [cm]
+N° ramas :  4
+N° de estribos por extremo:  3
+Espaciamiento :  11 [cm]
+
+Refuerzo exterior
+
+Diámetro estribo exterior:  10 [cm]
+Largo del estribo exterior 180.21 [cm]
+Ubicación entre ejes de barras horizontales: x = 5 [cm] y x = 45 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 45 [cm]
+
+Refuerzo interior
+
+Diámetro de estribos interiores 10 [cm]
+Largo de estribo interior n° 1 = 128.21 [cm]
+Ubicación entre ejes de barras horizontales: x = 18 [cm] y x = 32 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 45 [cm]
+
+
+Empalme central
+
+
+Ubicación : de 140.0 [cm] - 85.0 [cm]
+N° ramas :  4
+N° de estribos :  6
+Espaciamiento :  8 [cm]
+
+Refuerzo exterior
+
+Diámetro estribo exterior:  10 [cm]
+Largo del estribo exterior 180.21 [cm]
+Ubicación entre ejes de barras horizontales: x = 5 [cm] y x = 45 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 45 [cm]
+
+Refuerzo interior
+
+Diámetro de estribos interiores 10 [cm]
+
+Largo de estribo interior n° 1 = 128.21 [cm]
+Ubicación entre ejes de barras horizontales: x = 18 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 45 [cm]
+Peso total de estribos :  32.3 [kg]
+Peso total barras longitudinales :  13.9 [kg]
+Volumen Hormigón :  0.75 [m3]
+Costo acero : $ 117400.0
+Costo hormigón : $ 56250.0
+Costo total de columna tipo: $ 173650.0
+
+
+Resultados
+
+Flexión
+
+Mayor excentricidad 17.5 cm
+
+Momentos
+
+Mu_max =  28.35 [tf-m]
+Momento nominal ajustado a Mu y Pu máximos
+ØMn1 =  34.3 [tf-m]
+Momento nominal ajustado a Mu máximo debido a mayor excentricidad:
+ØMn2 =  32.3 [tf-m]
+
+Cargas
+
+Pu_max =  49.54 [tf]
+Pu_min =  17.1 [tf]
+Carga nominal que verifica Pu_max:
+ØPn1 =  59.9 [tf]
+Carga nominal que verifica Pu_min:
+ØPn2 =  184.6 [tf]
+
+F.U. 1 =  82.7 %
+F.U. 2 =  9.3 %
+
+Corte
+
+Corte en zona de rótula plástica
+ØVn1 =  65.9 [tf]
+F.U.1 =  69.8 %
+
+Corte en zona central
+ØVn2 =  54.0 [tf]
+F.U.2 =  56.6 %
+
+Corte en zona de empalme
+ØVn2 =  74.2 [tf]
+F.U.2 =  41.2 %
+
+
+
+Columna
+
+
+Piso N° 2
+Tipo : externa 
+
+
+Dimensiones
+
+Largo :  3 [m]
+Alto :  45 [cm]
+Ancho :  45 [cm]
+
+Refuerzo longitudinal
+
+4 barras Ø 28 [mm] en la posición y = 5 [cm], área = 24.632 [cm2]
+2 barras Ø 28 [mm] en la posición y = 17 [cm], área = 12.316 [cm2]
+2 barras Ø 28 [mm] en la posición y = 28 [cm], área = 12.316 [cm2]
+4 barras Ø 28 [mm] en la posición y = 40 [cm], área = 24.632 [cm2]
+
+Cuantía =  0.03649 
+
+
+Uniones y remates
+
+Columna para zonas centrales
+
+Para unión superior
+
+Longitud de gancho-remate =  [238.0, 169] [cm]
+Para unión inferior
+
+Longitud de gancho-remate =  [238.0, 169] [cm]
+
+
+Refuerzo transversal
+
+
+Zonas de rótula plástica y nodo
+
+
+Ubicación de nodo y zona de RP superior: de 175.0 [cm] a  300 [cm]:
+
+Ubicación de zona de RP inferior: de 0 a 50.0 [cm]:
+N° ramas :  4
+N° de estribos rótulas :  6
+Espaciamiento :  9 [cm]
+N° Estribos nodo :  13
+
+Refuerzo exterior
+
+Diámetro estribo exterior:  10 [cm]
+Largo del estribo exterior 160.21 [cm]
+Ubicación entre ejes de barras horizontales: x = 5 [cm] y x = 40 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 40 [cm]
+
+Refuerzo interior
+
+Diámetro de estribos interiores 10 [cm]
+Largo de estribo interior n° 1 = 112.21 [cm]
+Ubicación entre ejes de barras horizontales: x = 17 [cm] y x = 28 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 40 [cm]
+
+
+Zona central
+
+
+Ubicación superior: 155.5 [cm] - 175.0 [cm]
+
+Ubicación inferior: 50.0 [cm] - 69.5 [cm]
+N° ramas :  4
+N° de estribos por extremo:  1
+Espaciamiento :  15 [cm]
+
+Refuerzo exterior
+
+Diámetro estribo exterior:  10 [cm]
+Largo del estribo exterior 160.21 [cm]
+Ubicación entre ejes de barras horizontales: x = 5 [cm] y x = 40 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 40 [cm]
+
+Refuerzo interior
+
+Diámetro de estribos interiores 10 [cm]
+Largo de estribo interior n° 1 = 112.21 [cm]
+Ubicación entre ejes de barras horizontales: x = 17 [cm] y x = 28 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 40 [cm]
+
+
+Empalme central
+
+
+Ubicación : de 155.5 [cm] - 69.5 [cm]
+N° ramas :  4
+N° de estribos :  9
+Espaciamiento :  9 [cm]
+
+Refuerzo exterior
+
+Diámetro estribo exterior:  10 [cm]
+Largo del estribo exterior 160.21 [cm]
+Ubicación entre ejes de barras horizontales: x = 5 [cm] y x = 40 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 40 [cm]
+
+Refuerzo interior
+
+Diámetro de estribos interiores 10 [cm]
+
+Largo de estribo interior n° 1 = 112.21 [cm]
+Ubicación entre ejes de barras horizontales: x = 17 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 40 [cm]
+Peso total de estribos :  42.7 [kg]
+Peso total barras longitudinales :  51.6 [kg]
+Volumen Hormigón :  0.6075 [m3]
+Costo acero : $ 266600.0
+Costo hormigón : $ 45562.5
+Costo total de columna tipo: $ 312162.5
+
+
+Resultados
+
+Flexión
+
+Mayor excentricidad 25.5 cm
+
+Momentos
+
+Mu_max =  27.41 [tf-m]
+Momento nominal ajustado a Mu y Pu máximos
+ØMn1 =  51.1 [tf-m]
+Momento nominal ajustado a Mu máximo debido a mayor excentricidad:
+ØMn2 =  39.0 [tf-m]
+
+Cargas
+
+Pu_max =  22.36 [tf]
+Pu_min =  10.6 [tf]
+Carga nominal que verifica Pu_max:
+ØPn1 =  41.7 [tf]
+Carga nominal que verifica Pu_min:
+ØPn2 =  152.8 [tf]
+
+F.U. 1 =  53.6 %
+F.U. 2 =  6.9 %
+
+Corte
+
+Corte en zona de rótula plástica
+ØVn1 =  58.6 [tf]
+F.U.1 =  60.3 %
+
+Corte en zona central
+ØVn2 =  35.2 [tf]
+F.U.2 =  75.3 %
+
+Corte en zona de empalme
+ØVn2 =  58.6 [tf]
+F.U.2 =  45.2 %
+
+
+
+Columna
+
+
+Piso N° 1
+Tipo : interna 
+
+
+Dimensiones
+
+Largo :  3 [m]
+Alto :  65 [cm]
+Ancho :  65 [cm]
+
+Refuerzo longitudinal
+
+6 barras Ø 18 [mm] en la posición y = 5 [cm], área = 15.27 [cm2]
+2 barras Ø 18 [mm] en la posición y = 16 [cm], área = 5.09 [cm2]
+2 barras Ø 18 [mm] en la posición y = 27 [cm], área = 5.09 [cm2]
+2 barras Ø 18 [mm] en la posición y = 38 [cm], área = 5.09 [cm2]
+2 barras Ø 18 [mm] en la posición y = 49 [cm], área = 5.09 [cm2]
+6 barras Ø 18 [mm] en la posición y = 60 [cm], área = 15.27 [cm2]
+
+Cuantía =  0.01205 
+
+
+Uniones y remates
+
+Columna para zonas centrales
+
+Para unión superior
+
+Longitud de empalme unión viga-columna =  35.9 [cm]
+
+
+
+Refuerzo transversal
+
+
+Zonas de rótula plástica y nodo
+
+
+Ubicación de nodo y zona de RP superior: de 160 [cm] a  300 [cm]:
+
+Ubicación de zona de RP inferior: de 0 a 65 [cm]:
+N° ramas :  4
+N° de estribos rótulas :  9
+Espaciamiento :  8 [cm]
+N° Estribos nodo :  9
+
+Refuerzo exterior
+
+Diámetro estribo exterior:  12 [cm]
+Largo del estribo exterior 245.25 [cm]
+Ubicación entre ejes de barras horizontales: x = 5 [cm] y x = 60 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 60 [cm]
+
+Refuerzo interior
+
+Diámetro de estribos interiores 10 [cm]
+Largo de estribo interior n° 1 = 152.21 [cm]
+Ubicación entre ejes de barras horizontales: x = 27 [cm] y x = 38 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 60 [cm]
+
+
+Zona central
+
+
+Ubicación superior: 140.0 [cm] - 160 [cm]
+
+Ubicación inferior: 65 [cm] - 85.0 [cm]
+N° ramas :  4
+N° de estribos por extremo:  2
+Espaciamiento :  10 [cm]
+
+Refuerzo exterior
+
+Diámetro estribo exterior:  10 [cm]
+Largo del estribo exterior 240.21 [cm]
+Ubicación entre ejes de barras horizontales: x = 5 [cm] y x = 60 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 60 [cm]
+
+Refuerzo interior
+
+Diámetro de estribos interiores 10 [cm]
+Largo de estribo interior n° 1 = 152.21 [cm]
+Ubicación entre ejes de barras horizontales: x = 27 [cm] y x = 38 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 60 [cm]
+
+
+Empalme central
+
+
+Ubicación : de 140.0 [cm] - 85.0 [cm]
+N° ramas :  4
+N° de estribos :  6
+Espaciamiento :  8 [cm]
+
+Refuerzo exterior
+
+Diámetro estribo exterior:  10 [cm]
+Largo del estribo exterior 240.21 [cm]
+Ubicación entre ejes de barras horizontales: x = 5 [cm] y x = 60 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 60 [cm]
+
+Refuerzo interior
+
+Diámetro de estribos interiores 10 [cm]
+
+Largo de estribo interior n° 1 = 152.21 [cm]
+Ubicación entre ejes de barras horizontales: x = 27 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 60 [cm]
+Peso total de estribos :  44.5 [kg]
+Peso total barras longitudinales :  23.2 [kg]
+Volumen Hormigón :  1.2675 [m3]
+Costo acero : $ 186300.0
+Costo hormigón : $ 95062.5
+Costo total de columna tipo: $ 281362.5
+
+
+Resultados
+
+Flexión
+
+Mayor excentricidad 120.6 cm
+
+Momentos
+
+Mu_max =  48.13 [tf-m]
+Momento nominal ajustado a Mu y Pu máximos
+ØMn1 =  75.8 [tf-m]
+Momento nominal ajustado a Mu máximo debido a mayor excentricidad:
+ØMn2 =  66.8 [tf-m]
+
+Cargas
+
+Pu_max =  174.5 [tf]
+Pu_min =  47.1 [tf]
+Carga nominal que verifica Pu_max:
+ØPn1 =  274.9 [tf]
+Carga nominal que verifica Pu_min:
+ØPn2 =  55.4 [tf]
+
+F.U. 1 =  63.5 %
+F.U. 2 =  85.0 %
+
+Corte
+
+Corte en zona de rótula plástica
+ØVn1 =  120.7 [tf]
+F.U.1 =  89.8 %
+
+Corte en zona central
+ØVn2 =  79.1 [tf]
+F.U.2 =  77.5 %
+
+Corte en zona de empalme
+ØVn2 =  98.9 [tf]
+F.U.2 =  62.0 %
+
+
+
+Columna
+
+
+Piso N° 2
+Tipo : interna 
+
+
+Dimensiones
+
+Largo :  3 [m]
+Alto :  60 [cm]
+Ancho :  60 [cm]
+
+Refuerzo longitudinal
+
+5 barras Ø 18 [mm] en la posición y = 5 [cm], área = 12.725 [cm2]
+2 barras Ø 18 [mm] en la posición y = 18 [cm], área = 5.09 [cm2]
+2 barras Ø 18 [mm] en la posición y = 30 [cm], área = 5.09 [cm2]
+2 barras Ø 18 [mm] en la posición y = 42 [cm], área = 5.09 [cm2]
+5 barras Ø 18 [mm] en la posición y = 55 [cm], área = 12.725 [cm2]
+
+Cuantía =  0.01131 
+
+
+Uniones y remates
+
+Columna para zonas centrales
+
+Para unión superior
+
+Longitud de gancho-remate =  [182.6, 138.2] [cm]
+Para unión inferior
+
+Longitud de gancho-remate =  [182.6, 138.2] [cm]
+
+
+Refuerzo transversal
+
+
+Zonas de rótula plástica y nodo
+
+
+Ubicación de nodo y zona de RP superior: de 165 [cm] a  300 [cm]:
+
+Ubicación de zona de RP inferior: de 0 a 60 [cm]:
+N° ramas :  3
+N° de estribos rótulas :  8
+Espaciamiento :  8 [cm]
+N° Estribos nodo :  10
+
+Refuerzo exterior
+
+Diámetro estribo exterior:  12 [cm]
+Largo del estribo exterior 225.25 [cm]
+Ubicación entre ejes de barras horizontales: x = 5 [cm] y x = 55 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 55 [cm]
+
+Refuerzo interior
+
+Diámetro de estribos y trabas interiores 10 [cm]
+Largo de traba interior n°1 = 83.78 [cm]
+Ubicación entre ejes de barras horizontales: x = 30 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 55 [cm]
+
+
+Zona central
+
+
+Ubicación superior: 140.0 [cm] - 165 [cm]
+
+Ubicación inferior: 60 [cm] - 85.0 [cm]
+N° ramas :  3
+N° de estribos por extremo:  2
+Espaciamiento :  11 [cm]
+
+Refuerzo exterior
+
+Diámetro estribo exterior:  12 [cm]
+Largo del estribo exterior 225.25 [cm]
+Ubicación entre ejes de barras horizontales: x = 5 [cm] y x = 55 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 55 [cm]
+
+Refuerzo interior
+
+Diámetro de estribos y trabas interiores 10 [cm]
+Largo de traba interior n°1 = 83.78 [cm]
+Ubicación entre ejes de barras horizontales: x = 30 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 55 [cm]
+
+
+Empalme central
+
+
+Ubicación : de 140.0 [cm] - 85.0 [cm]
+N° ramas :  3
+N° de estribos :  6
+Espaciamiento :  8 [cm]
+
+Refuerzo exterior
+
+Diámetro estribo exterior:  10 [cm]
+Largo del estribo exterior 220.21 [cm]
+Ubicación entre ejes de barras horizontales: x = 5 [cm] y x = 55 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 55 [cm]
+
+Refuerzo interior
+
+Diámetro de estribos y trabas interiores 10 [cm]
+
+Largo de traba interior n°1 = 83.78 [cm]
+Ubicación entre ejes de barras horizontales: x = 30 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 55 [cm]
+Peso total de estribos :  32.5 [kg]
+Peso total barras longitudinales :  18.5 [kg]
+Volumen Hormigón :  1.08 [m3]
+Costo acero : $ 146000.0
+Costo hormigón : $ 81000.0
+Costo total de columna tipo: $ 227000.0
+
+
+Resultados
+
+Flexión
+
+Mayor excentricidad 109.0 cm
+
+Momentos
+
+Mu_max =  39.91 [tf-m]
+Momento nominal ajustado a Mu y Pu máximos
+ØMn1 =  63.0 [tf-m]
+Momento nominal ajustado a Mu máximo debido a mayor excentricidad:
+ØMn2 =  49.9 [tf-m]
+
+Cargas
+
+Pu_max =  130.05 [tf]
+Pu_min =  37.8 [tf]
+Carga nominal que verifica Pu_max:
+ØPn1 =  205.4 [tf]
+Carga nominal que verifica Pu_min:
+ØPn2 =  45.5 [tf]
+
+F.U. 1 =  63.3 %
+F.U. 2 =  83.1 %
+
+Corte
+
+Corte en zona de rótula plástica
+ØVn1 =  88.0 [tf]
+F.U.1 =  91.6 %
+
+Corte en zona central
+ØVn2 =  64.0 [tf]
+F.U.2 =  69.0 %
+
+Corte en zona de empalme
+ØVn2 =  68.0 [tf]
+F.U.2 =  64.9 %
+
+
+
+Columna
+
+
+Piso N° 1
+Tipo : interna 
+
+
+Dimensiones
+
+Largo :  3 [m]
+Alto :  55 [cm]
+Ancho :  55 [cm]
+
+Refuerzo longitudinal
+
+5 barras Ø 16 [mm] en la posición y = 5 [cm], área = 10.055 [cm2]
+2 barras Ø 16 [mm] en la posición y = 16 [cm], área = 4.022 [cm2]
+2 barras Ø 16 [mm] en la posición y = 27 [cm], área = 4.022 [cm2]
+2 barras Ø 16 [mm] en la posición y = 38 [cm], área = 4.022 [cm2]
+5 barras Ø 16 [mm] en la posición y = 50 [cm], área = 10.055 [cm2]
+
+Cuantía =  0.01064 
+
+
+Uniones y remates
+
+Columna para zonas centrales
+
+Para unión superior
+
+Longitud de empalme unión viga-columna =  31.9 [cm]
+
+
+
+Refuerzo transversal
+
+
+Zonas de rótula plástica y nodo
+
+
+Ubicación de nodo y zona de RP superior: de 170 [cm] a  300 [cm]:
+
+Ubicación de zona de RP inferior: de 0 a 55 [cm]:
+N° ramas :  3
+N° de estribos rótulas :  7
+Espaciamiento :  8 [cm]
+N° Estribos nodo :  11
+
+Refuerzo exterior
+
+Diámetro estribo exterior:  10 [cm]
+Largo del estribo exterior 200.21 [cm]
+Ubicación entre ejes de barras horizontales: x = 5 [cm] y x = 50 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 50 [cm]
+
+Refuerzo interior
+
+Diámetro de estribos y trabas interiores 10 [cm]
+Largo de traba interior n°1 = 78.78 [cm]
+Ubicación entre ejes de barras horizontales: x = 27 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 50 [cm]
+
+
+Zona central
+
+
+Ubicación superior: 137.0 [cm] - 170 [cm]
+
+Ubicación inferior: 55 [cm] - 88.0 [cm]
+N° ramas :  3
+N° de estribos por extremo:  3
+Espaciamiento :  10 [cm]
+
+Refuerzo exterior
+
+Diámetro estribo exterior:  12 [cm]
+Largo del estribo exterior 205.25 [cm]
+Ubicación entre ejes de barras horizontales: x = 5 [cm] y x = 50 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 50 [cm]
+
+Refuerzo interior
+
+Diámetro de estribos y trabas interiores 10 [cm]
+Largo de traba interior n°1 = 78.78 [cm]
+Ubicación entre ejes de barras horizontales: x = 27 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 50 [cm]
+
+
+Empalme central
+
+
+Ubicación : de 137.0 [cm] - 88.0 [cm]
+N° ramas :  3
+N° de estribos :  5
+Espaciamiento :  9 [cm]
+
+Refuerzo exterior
+
+Diámetro estribo exterior:  10 [cm]
+Largo del estribo exterior 200.21 [cm]
+Ubicación entre ejes de barras horizontales: x = 5 [cm] y x = 50 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 50 [cm]
+
+Refuerzo interior
+
+Diámetro de estribos y trabas interiores 10 [cm]
+
+Largo de traba interior n°1 = 78.78 [cm]
+Ubicación entre ejes de barras horizontales: x = 27 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 50 [cm]
+Peso total de estribos :  22.0 [kg]
+Peso total barras longitudinales :  13.1 [kg]
+Volumen Hormigón :  0.9075 [m3]
+Costo acero : $ 110200.0
+Costo hormigón : $ 68062.5
+Costo total de columna tipo: $ 178262.5
+
+
+Resultados
+
+Flexión
+
+Mayor excentricidad 86.7 cm
+
+Momentos
+
+Mu_max =  32.77 [tf-m]
+Momento nominal ajustado a Mu y Pu máximos
+ØMn1 =  50.5 [tf-m]
+Momento nominal ajustado a Mu máximo debido a mayor excentricidad:
+ØMn2 =  36.9 [tf-m]
+
+Cargas
+
+Pu_max =  86.29 [tf]
+Pu_min =  31.6 [tf]
+Carga nominal que verifica Pu_max:
+ØPn1 =  132.7 [tf]
+Carga nominal que verifica Pu_min:
+ØPn2 =  42.6 [tf]
+
+F.U. 1 =  65.0 %
+F.U. 2 =  74.2 %
+
+Corte
+
+Corte en zona de rótula plástica
+ØVn1 =  61.8 [tf]
+F.U.1 =  88.1 %
+
+Corte en zona central
+ØVn2 =  64.0 [tf]
+F.U.2 =  56.3 %
+
+Corte en zona de empalme
+ØVn2 =  55.0 [tf]
+F.U.2 =  65.6 %
+
+
+
+Columna
+
+
+Piso N° 2
+Tipo : interna 
+
+
+Dimensiones
+
+Largo :  3 [m]
+Alto :  50 [cm]
+Ancho :  50 [cm]
+
+Refuerzo longitudinal
+
+4 barras Ø 18 [mm] en la posición y = 5 [cm], área = 10.18 [cm2]
+2 barras Ø 18 [mm] en la posición y = 18 [cm], área = 5.09 [cm2]
+2 barras Ø 18 [mm] en la posición y = 32 [cm], área = 5.09 [cm2]
+4 barras Ø 18 [mm] en la posición y = 45 [cm], área = 10.18 [cm2]
+
+Cuantía =  0.01222 
+
+
+Uniones y remates
+
+Columna para zonas centrales
+
+Para unión superior
+
+Longitud de gancho-remate =  [182.6, 138.2] [cm]
+Para unión inferior
+
+Longitud de gancho-remate =  [182.6, 138.2] [cm]
+
+
+Refuerzo transversal
+
+
+Zonas de rótula plástica y nodo
+
+
+Ubicación de nodo y zona de RP superior: de 175 [cm] a  300 [cm]:
+
+Ubicación de zona de RP inferior: de 0 a 50 [cm]:
+N° ramas :  4
+N° de estribos rótulas :  6
+Espaciamiento :  9 [cm]
+N° Estribos nodo :  13
+
+Refuerzo exterior
+
+Diámetro estribo exterior:  10 [cm]
+Largo del estribo exterior 180.21 [cm]
+Ubicación entre ejes de barras horizontales: x = 5 [cm] y x = 45 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 45 [cm]
+
+Refuerzo interior
+
+Diámetro de estribos interiores 10 [cm]
+Largo de estribo interior n° 1 = 128.21 [cm]
+Ubicación entre ejes de barras horizontales: x = 18 [cm] y x = 32 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 45 [cm]
+
+
+Zona central
+
+
+Ubicación superior: 140.0 [cm] - 175 [cm]
+
+Ubicación inferior: 50 [cm] - 85.0 [cm]
+N° ramas :  4
+N° de estribos por extremo:  3
+Espaciamiento :  11 [cm]
+
+Refuerzo exterior
+
+Diámetro estribo exterior:  10 [cm]
+Largo del estribo exterior 180.21 [cm]
+Ubicación entre ejes de barras horizontales: x = 5 [cm] y x = 45 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 45 [cm]
+
+Refuerzo interior
+
+Diámetro de estribos interiores 10 [cm]
+Largo de estribo interior n° 1 = 128.21 [cm]
+Ubicación entre ejes de barras horizontales: x = 18 [cm] y x = 32 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 45 [cm]
+
+
+Empalme central
+
+
+Ubicación : de 140.0 [cm] - 85.0 [cm]
+N° ramas :  4
+N° de estribos :  6
+Espaciamiento :  8 [cm]
+
+Refuerzo exterior
+
+Diámetro estribo exterior:  10 [cm]
+Largo del estribo exterior 180.21 [cm]
+Ubicación entre ejes de barras horizontales: x = 5 [cm] y x = 45 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 45 [cm]
+
+Refuerzo interior
+
+Diámetro de estribos interiores 10 [cm]
+
+Largo de estribo interior n° 1 = 128.21 [cm]
+Ubicación entre ejes de barras horizontales: x = 18 [cm]
+Ubicación entre ejes de barras verticales: y = 5 [cm] e y = 45 [cm]
+Peso total de estribos :  32.3 [kg]
+Peso total barras longitudinales :  13.9 [kg]
+Volumen Hormigón :  0.75 [m3]
+Costo acero : $ 117400.0
+Costo hormigón : $ 56250.0
+Costo total de columna tipo: $ 173650.0
+
+
+Resultados
+
+Flexión
+
+Mayor excentricidad 57.8 cm
+
+Momentos
+
+Mu_max =  27.41 [tf-m]
+Momento nominal ajustado a Mu y Pu máximos
+ØMn1 =  33.4 [tf-m]
+Momento nominal ajustado a Mu máximo debido a mayor excentricidad:
+ØMn2 =  34.2 [tf-m]
+
+Cargas
+
+Pu_max =  43.7 [tf]
+Pu_min =  23.0 [tf]
+Carga nominal que verifica Pu_max:
+ØPn1 =  53.4 [tf]
+Carga nominal que verifica Pu_min:
+ØPn2 =  59.1 [tf]
+
+F.U. 1 =  82.0 %
+F.U. 2 =  38.9 %
+
+Corte
+
+Corte en zona de rótula plástica
+ØVn1 =  65.9 [tf]
+F.U.1 =  54.6 %
+
+Corte en zona central
+ØVn2 =  54.0 [tf]
+F.U.2 =  50.1 %
+
+Corte en zona de empalme
+ØVn2 =  74.2 [tf]
+F.U.2 =  36.5 %
+            </pre></div>
+        </ol>
+    <!-- <div style="page-break-after: always"></div> -->
+    
+    <h2 id="Esfuerzos"><li>Esfuerzos</li></h2>
+        <ol class="lista2">
+            <h3 id="Fuerzas y momentos de los miembros"><li>Fuerzas y momentos de los miembros</li></h3>
+                <p>
+                    En la siguiente tabla se listan las fuerzas y momentos en los extremos de cada elemento para todas las combinaciones de carga:
+                </p>
+
+                <div class="tabla">
+                                                                 [kg]         [kg]       [kg-m]
+fila  perfil        combo        nodo       axial        corte      momento
+===========================================================================
+1     COL  1        1.4 D        (i)      53904.8     -2842.49     -2945.46
+2                                (j)      50124.8     -2842.49      5581.99
+---------------------------------------------------------------------------
+3     COL  1    1.2 D + 1.6 L    (i)     93347.61     -5588.74     -5788.70
+4                                (j)     90107.61     -5588.74     10977.53
+---------------------------------------------------------------------------
+5     COL  1      1.2 D + L      (i)      75668.8     -4406.62     -4564.69
+6                                (j)      72428.8     -4406.62      8655.17
+---------------------------------------------------------------------------
+7     COL  1  1.2 D + 1.4 E + L  (i)      43960.0     15065.25     40870.30
+8                                (j)      40720.0     15065.25     -4325.46
+---------------------------------------------------------------------------
+9     COL  1  1.2 D - 1.4 E + L  (i)     107377.6    -23878.49    -49999.69
+10                               (j)     104137.6    -23878.49     21635.79
+---------------------------------------------------------------------------
+11    COL  1    0.9 D + 1.4 E    (i)      2944.28     17644.56     43541.48
+12                               (j)       514.28     17644.56     -9392.20
+---------------------------------------------------------------------------
+13    COL  1    0.9 D - 1.4 E    (i)     66361.88    -21299.19    -47328.51
+14                               (j)     63931.88    -21299.19     16569.05
+---------------------------------------------------------------------------
+15    COL  2        1.4 D        (i)     93454.53       398.41       371.81
+16                               (j)     89674.53       398.41      -823.40
+---------------------------------------------------------------------------
+17    COL  2    1.2 D + 1.6 L    (i)    169347.93       930.45       880.37
+18                               (j)    166107.93       930.45     -1910.96
+---------------------------------------------------------------------------
+19    COL  2      1.2 D + L      (i)    135881.41       709.59       669.75
+20                               (j)    132641.41       709.59     -1459.02
+---------------------------------------------------------------------------
+21    COL  2  1.2 D + 1.4 E + L  (i)    139586.38     26972.19     53019.71
+22                               (j)    136346.38     26972.19    -27896.86
+---------------------------------------------------------------------------
+23    COL  2  1.2 D - 1.4 E + L  (i)    132176.44    -25553.02    -51680.22
+24                               (j)    128936.44    -25553.02     24978.83
+---------------------------------------------------------------------------
+25    COL  2    0.9 D + 1.4 E    (i)     63782.88     26518.72     52588.99
+26                               (j)     61352.88     26518.72    -26967.18
+---------------------------------------------------------------------------
+27    COL  2    0.9 D - 1.4 E    (i)     56372.94    -26006.49    -52110.94
+28                               (j)     53942.94    -26006.49     25908.51
+---------------------------------------------------------------------------
+29    COL  3        1.4 D        (i)     93454.53      -398.41      -371.81
+30                               (j)     89674.53      -398.41       823.40
+---------------------------------------------------------------------------
+31    COL  3    1.2 D + 1.6 L    (i)    169347.93      -930.45      -880.37
+32                               (j)    166107.93      -930.45      1910.96
+---------------------------------------------------------------------------
+33    COL  3      1.2 D + L      (i)    135881.41      -709.59      -669.75
+34                               (j)    132641.41      -709.59      1459.02
+---------------------------------------------------------------------------
+35    COL  3  1.2 D + 1.4 E + L  (i)    132176.44     25553.02     51680.22
+36                               (j)    128936.44     25553.02    -24978.83
+---------------------------------------------------------------------------
+37    COL  3  1.2 D - 1.4 E + L  (i)    139586.38    -26972.19    -53019.71
+38                               (j)    136346.38    -26972.19     27896.86
+---------------------------------------------------------------------------
+39    COL  3    0.9 D + 1.4 E    (i)     56372.94     26006.49     52110.94
+40                               (j)     53942.94     26006.49    -25908.51
+---------------------------------------------------------------------------
+41    COL  3    0.9 D - 1.4 E    (i)     63782.88    -26518.72    -52588.99
+42                               (j)     61352.88    -26518.72     26967.18
+---------------------------------------------------------------------------
+43    COL  4        1.4 D        (i)      53904.8      2842.49      2945.46
+44                               (j)      50124.8      2842.49     -5581.99
+---------------------------------------------------------------------------
+45    COL  4    1.2 D + 1.6 L    (i)     93347.61      5588.74      5788.70
+46                               (j)     90107.61      5588.74    -10977.53
+---------------------------------------------------------------------------
+47    COL  4      1.2 D + L      (i)      75668.8      4406.62      4564.69
+48                               (j)      72428.8      4406.62     -8655.17
+---------------------------------------------------------------------------
+49    COL  4  1.2 D + 1.4 E + L  (i)     107377.6     23878.49     49999.69
+50                               (j)     104137.6     23878.49    -21635.79
+---------------------------------------------------------------------------
+51    COL  4  1.2 D - 1.4 E + L  (i)      43960.0    -15065.25    -40870.30
+52                               (j)      40720.0    -15065.25      4325.46
+---------------------------------------------------------------------------
+53    COL  4    0.9 D + 1.4 E    (i)     66361.88     21299.19     47328.51
+54                               (j)     63931.88     21299.19    -16569.05
+---------------------------------------------------------------------------
+55    COL  4    0.9 D - 1.4 E    (i)      2944.28    -17644.56    -43541.48
+56                               (j)       514.28    -17644.56      9392.20
+---------------------------------------------------------------------------
+57    COL  5        1.4 D        (i)     39407.52     -3956.44     -5710.28
+58                               (j)     36231.27     -3956.44      6159.06
+---------------------------------------------------------------------------
+59    COL  5    1.2 D + 1.6 L    (i)     69038.98     -7774.56    -11234.45
+60                               (j)     66316.48     -7774.56     12089.23
+---------------------------------------------------------------------------
+61    COL  5      1.2 D + L      (i)     55816.06     -6130.82     -8856.98
+62                               (j)     53093.56     -6130.82      9535.47
+---------------------------------------------------------------------------
+63    COL  5  1.2 D + 1.4 E + L  (i)     33934.38      8372.03     13855.92
+64                               (j)     31211.88      8372.03    -11260.18
+---------------------------------------------------------------------------
+65    COL  5  1.2 D - 1.4 E + L  (i)     77697.75    -20633.66    -31569.88
+66                               (j)     74975.25    -20633.66     30331.12
+---------------------------------------------------------------------------
+67    COL  5    0.9 D + 1.4 E    (i)      3451.72     11959.42     19042.01
+68                               (j)      1409.85     11959.42    -16836.25
+---------------------------------------------------------------------------
+69    COL  5    0.9 D - 1.4 E    (i)     47215.09    -17046.28    -26383.79
+70                               (j)     45173.21    -17046.28     24755.04
+---------------------------------------------------------------------------
+71    COL  6        1.4 D        (i)     69011.97       736.74      1079.73
+72                               (j)     65835.72       736.74     -1130.49
+---------------------------------------------------------------------------
+73    COL  6    1.2 D + 1.6 L    (i)    126182.67      1655.85      2426.73
+74                               (j)    123460.17      1655.85     -2540.81
+---------------------------------------------------------------------------
+75    COL  6      1.2 D + L      (i)    101046.59      1271.71      1863.76
+76                               (j)     98324.09      1271.71     -1951.38
+---------------------------------------------------------------------------
+77    COL  6  1.2 D + 1.4 E + L  (i)    103763.37     26188.93     39458.48
+78                               (j)    101040.87     26188.93    -39108.31
+---------------------------------------------------------------------------
+79    COL  6  1.2 D - 1.4 E + L  (i)     98329.81     -23645.5    -35730.96
+80                               (j)     95607.31     -23645.5     35205.55
+---------------------------------------------------------------------------
+81    COL  6    0.9 D + 1.4 E    (i)     47081.62     25390.84     38288.83
+82                               (j)     45039.75     25390.84    -37883.68
+---------------------------------------------------------------------------
+83    COL  6    0.9 D - 1.4 E    (i)     41648.06     -24443.6    -36900.61
+84                               (j)     39606.18     -24443.6     36430.19
+---------------------------------------------------------------------------
+85    COL  7        1.4 D        (i)     69011.97      -736.74     -1079.73
+86                               (j)     65835.72      -736.74      1130.49
+---------------------------------------------------------------------------
+87    COL  7    1.2 D + 1.6 L    (i)    126182.67     -1655.85     -2426.73
+88                               (j)    123460.17     -1655.85      2540.81
+---------------------------------------------------------------------------
+89    COL  7      1.2 D + L      (i)    101046.59     -1271.71     -1863.76
+90                               (j)     98324.09     -1271.71      1951.38
+---------------------------------------------------------------------------
+91    COL  7  1.2 D + 1.4 E + L  (i)     98329.81      23645.5     35730.96
+92                               (j)     95607.31      23645.5    -35205.55
+---------------------------------------------------------------------------
+93    COL  7  1.2 D - 1.4 E + L  (i)    103763.37    -26188.93    -39458.48
+94                               (j)    101040.87    -26188.93     39108.31
+---------------------------------------------------------------------------
+95    COL  7    0.9 D + 1.4 E    (i)     41648.06      24443.6     36900.61
+96                               (j)     39606.18      24443.6    -36430.19
+---------------------------------------------------------------------------
+97    COL  7    0.9 D - 1.4 E    (i)     47081.62    -25390.84    -38288.83
+98                               (j)     45039.75    -25390.84     37883.68
+---------------------------------------------------------------------------
+99    COL  8        1.4 D        (i)     39407.52      3956.44      5710.28
+100                              (j)     36231.27      3956.44     -6159.06
+---------------------------------------------------------------------------
+101   COL  8    1.2 D + 1.6 L    (i)     69038.98      7774.56     11234.45
+102                              (j)     66316.48      7774.56    -12089.23
+---------------------------------------------------------------------------
+103   COL  8      1.2 D + L      (i)     55816.06      6130.82      8856.98
+104                              (j)     53093.56      6130.82     -9535.47
+---------------------------------------------------------------------------
+105   COL  8  1.2 D + 1.4 E + L  (i)     77697.75     20633.66     31569.88
+106                              (j)     74975.25     20633.66    -30331.12
+---------------------------------------------------------------------------
+107   COL  8  1.2 D - 1.4 E + L  (i)     33934.38     -8372.03    -13855.92
+108                              (j)     31211.88     -8372.03     11260.18
+---------------------------------------------------------------------------
+109   COL  8    0.9 D + 1.4 E    (i)     47215.09     17046.28     26383.79
+110                              (j)     45173.21     17046.28    -24755.04
+---------------------------------------------------------------------------
+111   COL  8    0.9 D - 1.4 E    (i)      3451.72    -11959.42    -19042.01
+112                              (j)      1409.85    -11959.42     16836.25
+---------------------------------------------------------------------------
+113   COL  9        1.4 D        (i)     25507.14     -3343.74     -5016.75
+114                              (j)     22882.14     -3343.74      5014.46
+---------------------------------------------------------------------------
+115   COL  9    1.2 D + 1.6 L    (i)     45227.98     -6644.32     -9919.90
+116                              (j)     42977.98     -6644.32     10013.07
+---------------------------------------------------------------------------
+117   COL  9      1.2 D + L      (i)     36466.21     -5227.48     -7812.47
+118                              (j)     34216.21     -5227.48      7869.96
+---------------------------------------------------------------------------
+119   COL  9  1.2 D + 1.4 E + L  (i)     24893.76      6854.14      9188.69
+120                              (j)     22643.76      6854.14    -11373.74
+---------------------------------------------------------------------------
+121   COL  9  1.2 D - 1.4 E + L  (i)     48038.67     -17309.1    -24813.63
+122                              (j)     45788.67     -17309.1     27113.66
+---------------------------------------------------------------------------
+123   COL  9    0.9 D + 1.4 E    (i)      4824.99      9932.07     13776.10
+124                              (j)      3137.49      9932.07    -16020.12
+---------------------------------------------------------------------------
+125   COL  9    0.9 D - 1.4 E    (i)     27969.91    -14231.17    -20226.22
+126                              (j)     26282.41    -14231.17     22467.28
+---------------------------------------------------------------------------
+127   COL 10        1.4 D        (i)     45180.02       345.38       579.69
+128                              (j)     42555.02       345.38      -456.46
+---------------------------------------------------------------------------
+129   COL 10    1.2 D + 1.6 L    (i)     83554.78       850.59      1390.85
+130                              (j)     81304.78       850.59     -1160.92
+---------------------------------------------------------------------------
+131   COL 10      1.2 D + L      (i)     66743.89       642.63      1055.61
+132                              (j)     64493.89       642.63      -872.30
+---------------------------------------------------------------------------
+133   COL 10  1.2 D + 1.4 E + L  (i)     68220.22     20491.02     30007.15
+134                              (j)     65970.22     20491.02    -31465.92
+---------------------------------------------------------------------------
+135   COL 10  1.2 D - 1.4 E + L  (i)     65267.55    -19205.75    -27895.93
+136                              (j)     63017.55    -19205.75     29721.33
+---------------------------------------------------------------------------
+137   COL 10    0.9 D + 1.4 E    (i)     30520.63     20070.42     29324.19
+138                              (j)     28833.13     20070.42    -30887.06
+---------------------------------------------------------------------------
+139   COL 10    0.9 D - 1.4 E    (i)     27567.96    -19626.35    -28578.88
+140                              (j)     25880.46    -19626.35     30300.18
+---------------------------------------------------------------------------
+141   COL 11        1.4 D        (i)     45180.02      -345.38      -579.69
+142                              (j)     42555.02      -345.38       456.46
+---------------------------------------------------------------------------
+143   COL 11    1.2 D + 1.6 L    (i)     83554.78      -850.59     -1390.85
+144                              (j)     81304.78      -850.59      1160.92
+---------------------------------------------------------------------------
+145   COL 11      1.2 D + L      (i)     66743.89      -642.63     -1055.61
+146                              (j)     64493.89      -642.63       872.30
+---------------------------------------------------------------------------
+147   COL 11  1.2 D + 1.4 E + L  (i)     65267.55     19205.75     27895.93
+148                              (j)     63017.55     19205.75    -29721.33
+---------------------------------------------------------------------------
+149   COL 11  1.2 D - 1.4 E + L  (i)     68220.22    -20491.02    -30007.15
+150                              (j)     65970.22    -20491.02     31465.92
+---------------------------------------------------------------------------
+151   COL 11    0.9 D + 1.4 E    (i)     27567.96     19626.35     28578.88
+152                              (j)     25880.46     19626.35    -30300.18
+---------------------------------------------------------------------------
+153   COL 11    0.9 D - 1.4 E    (i)     30520.63    -20070.42    -29324.19
+154                              (j)     28833.13    -20070.42     30887.06
+---------------------------------------------------------------------------
+155   COL 12        1.4 D        (i)     25507.14      3343.74      5016.75
+156                              (j)     22882.14      3343.74     -5014.46
+---------------------------------------------------------------------------
+157   COL 12    1.2 D + 1.6 L    (i)     45227.98      6644.32      9919.90
+158                              (j)     42977.98      6644.32    -10013.07
+---------------------------------------------------------------------------
+159   COL 12      1.2 D + L      (i)     36466.21      5227.48      7812.47
+160                              (j)     34216.21      5227.48     -7869.96
+---------------------------------------------------------------------------
+161   COL 12  1.2 D + 1.4 E + L  (i)     48038.67      17309.1     24813.63
+162                              (j)     45788.67      17309.1    -27113.66
+---------------------------------------------------------------------------
+163   COL 12  1.2 D - 1.4 E + L  (i)     24893.76     -6854.14     -9188.69
+164                              (j)     22643.76     -6854.14     11373.74
+---------------------------------------------------------------------------
+165   COL 12    0.9 D + 1.4 E    (i)     27969.91     14231.17     20226.22
+166                              (j)     26282.41     14231.17    -22467.28
+---------------------------------------------------------------------------
+167   COL 12    0.9 D - 1.4 E    (i)      4824.99     -9932.07    -13776.10
+168                              (j)      3137.49     -9932.07     16020.12
+---------------------------------------------------------------------------
+169   COL 13        1.4 D        (i)     12516.86     -4811.06     -6057.72
+170                              (j)      9891.86     -4811.06      8375.45
+---------------------------------------------------------------------------
+171   COL 13    1.2 D + 1.6 L    (i)     22150.15     -9686.86    -12204.75
+172                              (j)     19900.15     -9686.86     16855.83
+---------------------------------------------------------------------------
+173   COL 13      1.2 D + L      (i)     17867.12      -7600.7     -9575.09
+174                              (j)     15617.12      -7600.7     13227.00
+---------------------------------------------------------------------------
+175   COL 13  1.2 D + 1.4 E + L  (i)     13909.46       265.91      -909.28
+176                              (j)     11659.46       265.91     -1707.02
+---------------------------------------------------------------------------
+177   COL 13  1.2 D - 1.4 E + L  (i)     21824.79    -15467.31    -18240.91
+178                              (j)     19574.79    -15467.31     28161.03
+---------------------------------------------------------------------------
+179   COL 13    0.9 D + 1.4 E    (i)      4088.89      4773.79      4771.57
+180                              (j)      2401.39      4773.79     -9549.81
+---------------------------------------------------------------------------
+181   COL 13    0.9 D - 1.4 E    (i)     12004.22    -10959.43    -12560.06
+182                              (j)     10316.72    -10959.43     20318.24
+---------------------------------------------------------------------------
+183   COL 14        1.4 D        (i)     22826.72      1061.57      1277.61
+184                              (j)     20201.72      1061.57     -1907.09
+---------------------------------------------------------------------------
+185   COL 14    1.2 D + 1.6 L    (i)     42241.23      2374.85      2890.18
+186                              (j)     39991.23      2374.85     -4234.37
+---------------------------------------------------------------------------
+187   COL 14      1.2 D + L      (i)     33737.93       1825.5      2217.02
+188                              (j)     31487.93       1825.5     -3259.47
+---------------------------------------------------------------------------
+189   COL 14  1.2 D + 1.4 E + L  (i)     34390.21     16127.66     20784.98
+190                              (j)     32140.21     16127.66    -27598.00
+---------------------------------------------------------------------------
+191   COL 14  1.2 D - 1.4 E + L  (i)     33085.65    -12476.66    -16350.93
+192                              (j)     30835.65    -12476.66     21079.05
+---------------------------------------------------------------------------
+193   COL 14    0.9 D + 1.4 E    (i)      15326.6     14984.59     19389.28
+194                              (j)      13639.1     14984.59    -25564.51
+---------------------------------------------------------------------------
+195   COL 14    0.9 D - 1.4 E    (i)     14022.04    -13619.72    -17746.63
+196                              (j)     12334.54    -13619.72     23112.54
+---------------------------------------------------------------------------
+197   COL 15        1.4 D        (i)     22826.72     -1061.57     -1277.61
+198                              (j)     20201.72     -1061.57      1907.09
+---------------------------------------------------------------------------
+199   COL 15    1.2 D + 1.6 L    (i)     42241.23     -2374.85     -2890.18
+200                              (j)     39991.23     -2374.85      4234.37
+---------------------------------------------------------------------------
+201   COL 15      1.2 D + L      (i)     33737.93      -1825.5     -2217.02
+202                              (j)     31487.93      -1825.5      3259.47
+---------------------------------------------------------------------------
+203   COL 15  1.2 D + 1.4 E + L  (i)     33085.65     12476.66     16350.93
+204                              (j)     30835.65     12476.66    -21079.05
+---------------------------------------------------------------------------
+205   COL 15  1.2 D - 1.4 E + L  (i)     34390.21    -16127.66    -20784.98
+206                              (j)     32140.21    -16127.66     27598.00
+---------------------------------------------------------------------------
+207   COL 15    0.9 D + 1.4 E    (i)     14022.04     13619.72     17746.63
+208                              (j)     12334.54     13619.72    -23112.54
+---------------------------------------------------------------------------
+209   COL 15    0.9 D - 1.4 E    (i)      15326.6    -14984.59    -19389.28
+210                              (j)      13639.1    -14984.59     25564.51
+---------------------------------------------------------------------------
+211   COL 16        1.4 D        (i)     12516.86      4811.06      6057.72
+212                              (j)      9891.86      4811.06     -8375.45
+---------------------------------------------------------------------------
+213   COL 16    1.2 D + 1.6 L    (i)     22150.15      9686.86     12204.75
+214                              (j)     19900.15      9686.86    -16855.83
+---------------------------------------------------------------------------
+215   COL 16      1.2 D + L      (i)     17867.12       7600.7      9575.09
+216                              (j)     15617.12       7600.7    -13227.00
+---------------------------------------------------------------------------
+217   COL 16  1.2 D + 1.4 E + L  (i)     21824.79     15467.31     18240.91
+218                              (j)     19574.79     15467.31    -28161.03
+---------------------------------------------------------------------------
+219   COL 16  1.2 D - 1.4 E + L  (i)     13909.46      -265.91       909.28
+220                              (j)     11659.46      -265.91      1707.02
+---------------------------------------------------------------------------
+221   COL 16    0.9 D + 1.4 E    (i)     12004.22     10959.43     12560.06
+222                              (j)     10316.72     10959.43    -20318.24
+---------------------------------------------------------------------------
+223   COL 16    0.9 D - 1.4 E    (i)      4088.89     -4773.79     -4771.57
+224                              (j)      2401.39     -4773.79      9549.81
+---------------------------------------------------------------------------
+225   VIGA17        1.4 D        (i)     -1113.96     10717.28     11292.27
+226                              (j)     -1113.96    -11230.06     13087.00
+---------------------------------------------------------------------------
+227   VIGA17    1.2 D + 1.6 L    (i)     -2185.82     21068.63     22211.98
+228                              (j)     -2185.82    -22040.25     25612.66
+---------------------------------------------------------------------------
+229   VIGA17      1.2 D + L      (i)     -1724.19     16612.73     17512.15
+230                              (j)     -1724.19    -17384.82     20214.45
+---------------------------------------------------------------------------
+231   VIGA17  1.2 D + 1.4 E + L  (i)     -3536.01      6785.61    -18181.38
+232                              (j)     -3536.01    -27211.94     53310.76
+---------------------------------------------------------------------------
+233   VIGA17  1.2 D - 1.4 E + L  (i)        87.62     26439.85     53205.67
+234                              (j)        87.62      -7557.7    -12881.86
+---------------------------------------------------------------------------
+235   VIGA17    0.9 D + 1.4 E    (i)     -2527.94     -2937.44    -28434.21
+236                              (j)     -2527.94    -17046.44     41509.38
+---------------------------------------------------------------------------
+237   VIGA17    0.9 D - 1.4 E    (i)       1095.7      16716.8     42952.84
+238                              (j)       1095.7       2607.8    -24683.24
+---------------------------------------------------------------------------
+239   VIGA18        1.4 D        (i)      -775.62       9432.5     11183.86
+240                              (j)      -775.62      -9432.5     11183.86
+---------------------------------------------------------------------------
+241   VIGA18    1.2 D + 1.6 L    (i)     -1460.42      17885.0     21274.97
+242                              (j)     -1460.42     -17885.0     21274.97
+---------------------------------------------------------------------------
+243   VIGA18      1.2 D + L      (i)     -1162.07      14210.0     16891.67
+244                              (j)     -1162.07     -14210.0     16891.67
+---------------------------------------------------------------------------
+245   VIGA18  1.2 D + 1.4 E + L  (i)     -1162.07      5371.07    -14044.59
+246                              (j)     -1162.07    -23048.93     47827.92
+---------------------------------------------------------------------------
+247   VIGA18  1.2 D - 1.4 E + L  (i)     -1162.07     23048.93     47827.92
+248                              (j)     -1162.07     -5371.07    -14044.59
+---------------------------------------------------------------------------
+249   VIGA18    0.9 D + 1.4 E    (i)      -498.62     -2775.18    -23746.63
+250                              (j)      -498.62    -14902.68     38125.88
+---------------------------------------------------------------------------
+251   VIGA18    0.9 D - 1.4 E    (i)      -498.62     14902.68     38125.88
+252                              (j)      -498.62      2775.18    -23746.63
+---------------------------------------------------------------------------
+253   VIGA19        1.4 D        (i)     -1113.96     11230.06     13087.00
+254                              (j)     -1113.96    -10717.28     11292.27
+---------------------------------------------------------------------------
+255   VIGA19    1.2 D + 1.6 L    (i)     -2185.82     22040.25     25612.66
+256                              (j)     -2185.82    -21068.63     22211.98
+---------------------------------------------------------------------------
+257   VIGA19      1.2 D + L      (i)     -1724.19     17384.82     20214.45
+258                              (j)     -1724.19    -16612.73     17512.15
+---------------------------------------------------------------------------
+259   VIGA19  1.2 D + 1.4 E + L  (i)        87.62       7557.7    -12881.86
+260                              (j)        87.62    -26439.85     53205.67
+---------------------------------------------------------------------------
+261   VIGA19  1.2 D - 1.4 E + L  (i)     -3536.01     27211.94     53310.76
+262                              (j)     -3536.01     -6785.61    -18181.38
+---------------------------------------------------------------------------
+263   VIGA19    0.9 D + 1.4 E    (i)       1095.7      -2607.8    -24683.24
+264                              (j)       1095.7     -16716.8     42952.84
+---------------------------------------------------------------------------
+265   VIGA19    0.9 D - 1.4 E    (i)     -2527.94     17046.44     41509.38
+266                              (j)     -2527.94      2937.44    -28434.21
+---------------------------------------------------------------------------
+267   VIGA20        1.4 D        (i)       612.71     10724.13     11175.81
+268                              (j)       612.71     -11223.2     12922.58
+---------------------------------------------------------------------------
+269   VIGA20    1.2 D + 1.6 L    (i)      1130.24      21088.5     22009.14
+270                              (j)      1130.24    -22020.39     25270.76
+---------------------------------------------------------------------------
+271   VIGA20      1.2 D + L      (i)       903.34     16627.35     17347.93
+272                              (j)       903.34     -17370.2     19947.91
+---------------------------------------------------------------------------
+273   VIGA20  1.2 D + 1.4 E + L  (i)      2227.14      6318.13    -20448.87
+274                              (j)      2227.14    -27679.42     54315.67
+---------------------------------------------------------------------------
+275   VIGA20  1.2 D - 1.4 E + L  (i)      -420.46     26936.57     55144.74
+276                              (j)      -420.46     -7060.98    -14419.84
+---------------------------------------------------------------------------
+277   VIGA20    0.9 D + 1.4 E    (i)      1717.68     -3415.14    -30612.36
+278                              (j)      1717.68    -17524.14     42675.13
+---------------------------------------------------------------------------
+279   VIGA20    0.9 D - 1.4 E    (i)      -929.92      17203.3     44981.26
+280                              (j)      -929.92      3094.31    -26060.38
+---------------------------------------------------------------------------
+281   VIGA21        1.4 D        (i)       221.35       9432.5     11212.40
+282                              (j)       221.35      -9432.5     11212.40
+---------------------------------------------------------------------------
+283   VIGA21    1.2 D + 1.6 L    (i)       324.98      17885.0     21339.11
+284                              (j)       324.98     -17885.0     21339.11
+---------------------------------------------------------------------------
+285   VIGA21      1.2 D + L      (i)       274.26      14210.0     16940.93
+286                              (j)       274.26     -14210.0     16940.93
+---------------------------------------------------------------------------
+287   VIGA21  1.2 D + 1.4 E + L  (i)       274.26      5141.22    -14799.78
+288                              (j)       274.26    -23278.78     48681.64
+---------------------------------------------------------------------------
+289   VIGA21  1.2 D - 1.4 E + L  (i)       274.26     23278.78     48681.64
+290                              (j)       274.26     -5141.22    -14799.78
+---------------------------------------------------------------------------
+291   VIGA21    0.9 D + 1.4 E    (i)        142.3     -3005.03    -24532.74
+292                              (j)        142.3    -15132.53     38948.69
+---------------------------------------------------------------------------
+293   VIGA21    0.9 D - 1.4 E    (i)        142.3     15132.53     38948.69
+294                              (j)        142.3      3005.03    -24532.74
+---------------------------------------------------------------------------
+295   VIGA22        1.4 D        (i)       612.71      11223.2     12922.58
+296                              (j)       612.71    -10724.13     11175.81
+---------------------------------------------------------------------------
+297   VIGA22    1.2 D + 1.6 L    (i)      1130.24     22020.39     25270.76
+298                              (j)      1130.24     -21088.5     22009.14
+---------------------------------------------------------------------------
+299   VIGA22      1.2 D + L      (i)       903.34      17370.2     19947.91
+300                              (j)       903.34    -16627.35     17347.93
+---------------------------------------------------------------------------
+301   VIGA22  1.2 D + 1.4 E + L  (i)      -420.46      7060.98    -14419.84
+302                              (j)      -420.46    -26936.57     55144.74
+---------------------------------------------------------------------------
+303   VIGA22  1.2 D - 1.4 E + L  (i)      2227.14     27679.42     54315.67
+304                              (j)      2227.14     -6318.13    -20448.87
+---------------------------------------------------------------------------
+305   VIGA22    0.9 D + 1.4 E    (i)      -929.92     -3094.31    -26060.38
+306                              (j)      -929.92     -17203.3     44981.26
+---------------------------------------------------------------------------
+307   VIGA22    0.9 D - 1.4 E    (i)      1717.68     17524.14     42675.13
+308                              (j)      1717.68      3415.14    -30612.36
+---------------------------------------------------------------------------
+309   VIGA23        1.4 D        (i)     -1467.32     10365.28     11072.17
+310                              (j)     -1467.32    -10724.55     12329.63
+---------------------------------------------------------------------------
+311   VIGA23    1.2 D + 1.6 L    (i)     -3042.54     20827.83     22217.82
+312                              (j)     -3042.54    -21546.05     24731.61
+---------------------------------------------------------------------------
+313   VIGA23      1.2 D + L      (i)     -2373.22     16349.09     17445.05
+314                              (j)     -2373.22    -16913.46     19420.35
+---------------------------------------------------------------------------
+315   VIGA23  1.2 D + 1.4 E + L  (i)     -1707.61       8734.3    -10464.46
+316                              (j)     -1707.61    -24528.25     44814.37
+---------------------------------------------------------------------------
+317   VIGA23  1.2 D - 1.4 E + L  (i)     -3038.83     23963.88     45354.57
+318                              (j)     -3038.83     -9298.67     -5973.66
+---------------------------------------------------------------------------
+319   VIGA23    0.9 D + 1.4 E    (i)      -277.67       -951.4    -20791.69
+320                              (j)      -277.67    -14509.15     33320.20
+---------------------------------------------------------------------------
+321   VIGA23    0.9 D - 1.4 E    (i)     -1608.89     14278.18     35027.34
+322                              (j)     -1608.89       720.43    -17467.82
+---------------------------------------------------------------------------
+323   VIGA24        1.4 D        (i)      -751.13      9003.75     10595.56
+324                              (j)      -751.13     -9003.75     10595.56
+---------------------------------------------------------------------------
+325   VIGA24    1.2 D + 1.6 L    (i)     -1518.27      17517.5     20680.51
+326                              (j)     -1518.27     -17517.5     20680.51
+---------------------------------------------------------------------------
+327   VIGA24      1.2 D + L      (i)     -1190.36      13842.5     16331.03
+328                              (j)     -1190.36     -13842.5     16331.03
+---------------------------------------------------------------------------
+329   VIGA24  1.2 D + 1.4 E + L  (i)     -1190.36      7051.77     -7436.53
+330                              (j)     -1190.36    -20633.23     40098.60
+---------------------------------------------------------------------------
+331   VIGA24  1.2 D - 1.4 E + L  (i)     -1190.36     20633.23     40098.60
+332                              (j)     -1190.36     -7051.77     -7436.53
+---------------------------------------------------------------------------
+333   VIGA24    0.9 D + 1.4 E    (i)      -482.87     -1002.61    -16956.13
+334                              (j)      -482.87    -12578.86     30578.99
+---------------------------------------------------------------------------
+335   VIGA24    0.9 D - 1.4 E    (i)      -482.87     12578.86     30578.99
+336                              (j)      -482.87      1002.61    -16956.13
+---------------------------------------------------------------------------
+337   VIGA25        1.4 D        (i)     -1467.32     10724.55     12329.63
+338                              (j)     -1467.32    -10365.28     11072.17
+---------------------------------------------------------------------------
+339   VIGA25    1.2 D + 1.6 L    (i)     -3042.54     21546.05     24731.61
+340                              (j)     -3042.54    -20827.83     22217.82
+---------------------------------------------------------------------------
+341   VIGA25      1.2 D + L      (i)     -2373.22     16913.46     19420.35
+342                              (j)     -2373.22    -16349.09     17445.05
+---------------------------------------------------------------------------
+343   VIGA25  1.2 D + 1.4 E + L  (i)     -3038.83      9298.67     -5973.66
+344                              (j)     -3038.83    -23963.88     45354.57
+---------------------------------------------------------------------------
+345   VIGA25  1.2 D - 1.4 E + L  (i)     -1707.61     24528.25     44814.37
+346                              (j)     -1707.61      -8734.3    -10464.46
+---------------------------------------------------------------------------
+347   VIGA25    0.9 D + 1.4 E    (i)     -1608.89      -720.43    -17467.82
+348                              (j)     -1608.89    -14278.18     35027.34
+---------------------------------------------------------------------------
+349   VIGA25    0.9 D - 1.4 E    (i)      -277.67     14509.15     33320.20
+350                              (j)      -277.67        951.4    -20791.69
+---------------------------------------------------------------------------
+351   VIGA26        1.4 D        (i)      4811.06      9891.86      8375.45
+352                              (j)      4811.06    -11197.97     12946.81
+---------------------------------------------------------------------------
+353   VIGA26    1.2 D + 1.6 L    (i)      9686.86     19900.15     16855.83
+354                              (j)      9686.86    -22473.73     25863.34
+---------------------------------------------------------------------------
+355   VIGA26      1.2 D + L      (i)       7600.7     15617.12     13227.00
+356                              (j)       7600.7    -17645.43     20326.06
+---------------------------------------------------------------------------
+357   VIGA26  1.2 D + 1.4 E + L  (i)     10818.47     11659.46     -1707.02
+358                              (j)     10818.47     -21603.1     33095.72
+---------------------------------------------------------------------------
+359   VIGA26  1.2 D - 1.4 E + L  (i)      4382.93     19574.79     28161.03
+360                              (j)      4382.93    -13687.76      7556.41
+---------------------------------------------------------------------------
+361   VIGA26    0.9 D + 1.4 E    (i)      6310.59      2401.39     -9549.81
+362                              (j)      6310.59    -11156.36     21092.60
+---------------------------------------------------------------------------
+363   VIGA26    0.9 D - 1.4 E    (i)      -124.95     10316.72     20318.24
+364                              (j)      -124.95     -3241.02     -4446.71
+---------------------------------------------------------------------------
+365   VIGA27        1.4 D        (i)      3749.49      9003.75     11039.72
+366                              (j)      3749.49     -9003.75     11039.72
+---------------------------------------------------------------------------
+367   VIGA27    1.2 D + 1.6 L    (i)      7312.01      17517.5     21628.97
+368                              (j)      7312.01     -17517.5     21628.97
+---------------------------------------------------------------------------
+369   VIGA27      1.2 D + L      (i)       5775.2      13842.5     17066.59
+370                              (j)       5775.2     -13842.5     17066.59
+---------------------------------------------------------------------------
+371   VIGA27  1.2 D + 1.4 E + L  (i)       5775.2     10537.11      5497.72
+372                              (j)       5775.2    -17147.89     28635.45
+---------------------------------------------------------------------------
+373   VIGA27  1.2 D - 1.4 E + L  (i)       5775.2     17147.89     28635.45
+374                              (j)       5775.2    -10537.11      5497.72
+---------------------------------------------------------------------------
+375   VIGA27    0.9 D + 1.4 E    (i)      2410.39      2482.73     -4471.91
+376                              (j)      2410.39     -9093.52     18665.83
+---------------------------------------------------------------------------
+377   VIGA27    0.9 D - 1.4 E    (i)      2410.39      9093.52     18665.83
+378                              (j)      2410.39     -2482.73     -4471.91
+---------------------------------------------------------------------------
+379   VIGA28        1.4 D        (i)      4811.06     11197.97     12946.81
+380                              (j)      4811.06     -9891.86      8375.45
+---------------------------------------------------------------------------
+381   VIGA28    1.2 D + 1.6 L    (i)      9686.86     22473.73     25863.34
+382                              (j)      9686.86    -19900.15     16855.83
+---------------------------------------------------------------------------
+383   VIGA28      1.2 D + L      (i)       7600.7     17645.43     20326.06
+384                              (j)       7600.7    -15617.12     13227.00
+---------------------------------------------------------------------------
+385   VIGA28  1.2 D + 1.4 E + L  (i)      4382.93     13687.76      7556.41
+386                              (j)      4382.93    -19574.79     28161.03
+---------------------------------------------------------------------------
+387   VIGA28  1.2 D - 1.4 E + L  (i)     10818.47      21603.1     33095.72
+388                              (j)     10818.47    -11659.46     -1707.02
+---------------------------------------------------------------------------
+389   VIGA28    0.9 D + 1.4 E    (i)      -124.95      3241.02     -4446.71
+390                              (j)      -124.95    -10316.72     20318.24
+---------------------------------------------------------------------------
+391   VIGA28    0.9 D - 1.4 E    (i)      6310.59     11156.36     21092.60
+392                              (j)      6310.59     -2401.39     -9549.81
+---------------------------------------------------------------------------
+
+                </div>
+            <!-- <div style="page-break-after: always"></div> -->
+
+            <h3 id="Diagramas de esfuerzo interno"><li>Diagramas de esfuerzo interno</li></h3>
+                <p>
+                    En este ítem se listan todos los diagramas de esfuerzo interno de los miembros de la estructuras, ordenados por: combinaciones de carga y tipo de elemento (columnas y después vigas).
+                </p>
+
+                <table class="tabla">
+                    <tr>
+                        <td colspan="2"><img src="src/miembro6 [0.9 D - 1.4 E].png"></td>
+                    </tr>
+                    <tr>
+                        <td>
+Extremo i:
+N(35.0): 125865.05 [kg]
+V(35.0): -1655.85 [kg]
+M(35.0): 1847.18 [kg-m]
+</td>
+                        <td>
+Extremo i:
+N(35.0): 100728.97 [kg]
+V(35.0): -1271.71 [kg]
+M(35.0): 1418.66 [kg-m]
+                        </td>
+                    </tr>
+                </table>
+            <!-- <div style="page-break-after: always"></div> -->
+        </ol>
+</ol>
+
+</body>
+</html>
